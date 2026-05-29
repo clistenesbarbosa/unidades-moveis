@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard Unidades Móveis</title>
+</head>
+<body>
+  <h1>Dashboard Unidades Móveis</h1>
+  <p id="status">Carregando JSON...</p>
+
+  <script>
+    fetch('data/unidades_moveis.json')
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('status').textContent =
+          data.mensagem + ' | Atualizado em: ' + data.atualizadoEm;
+      })
+      .catch(error => {
+        document.getElementById('status').textContent =
+          'Erro ao carregar JSON: ' + error.message;
+      });
+  </script>
+</body>
+</html>
