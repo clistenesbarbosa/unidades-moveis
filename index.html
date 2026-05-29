@@ -5,281 +5,873 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard Unidades Móveis</title>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <style>
     :root {
-      --bg: #f7f7f5;
-      --panel: #ffffff;
-      --panel-soft: #faf9f5;
-      --border: #dedbd2;
-      --text: #252525;
-      --muted: #6b6b6b;
-      --blue: #1565c0;
-      --green: #0f9d68;
-      --red: #c62828;
-      --orange: #c77700;
-      --purple: #6a5acd;
-      --radius: 12px;
+      --bg: #f3f5f8;
+      --surface: #ffffff;
+      --surface-soft: #f8fafc;
+      --border: #d9dee7;
+      --border-soft: #edf0f5;
+      --text: #1f2937;
+      --muted: #667085;
+      --muted-2: #98a2b3;
+
+      --primary: #164194;
+      --primary-dark: #0f2f6f;
+      --primary-soft: #e9f1ff;
+
+      --success: #039855;
+      --success-soft: #ecfdf3;
+      --danger: #d92d20;
+      --danger-soft: #fef3f2;
+      --warning: #dc6803;
+      --warning-soft: #fff7ed;
+      --purple: #6941c6;
+      --purple-soft: #f4f3ff;
+
+      --radius: 16px;
+      --radius-sm: 10px;
+      --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      --shadow-sm: 0 4px 12px rgba(15, 23, 42, 0.06);
     }
 
     * {
       box-sizing: border-box;
     }
 
-    body {
+    html, body {
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
+      padding: 0;
+      min-height: 100%;
+      font-family: Inter, Arial, Helvetica, sans-serif;
       background: var(--bg);
       color: var(--text);
     }
 
-    .app {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 24px;
+    body {
+      overflow-x: hidden;
     }
 
-    .topbar {
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 16px;
-      margin-bottom: 16px;
+    .app-shell {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      min-height: 100vh;
     }
 
-    .title {
-      margin: 0;
-      font-size: 26px;
+    .sidebar {
+      background: linear-gradient(180deg, #0f2f6f 0%, #164194 55%, #1d4fa8 100%);
+      color: #fff;
+      padding: 24px 18px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow);
+      z-index: 20;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 4px 6px 22px;
+      border-bottom: 1px solid rgba(255,255,255,.18);
+      margin-bottom: 20px;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.16);
+      border: 1px solid rgba(255,255,255,.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      letter-spacing: .5px;
+    }
+
+    .brand-title {
+      line-height: 1.15;
+    }
+
+    .brand-title strong {
+      display: block;
+      font-size: 15px;
       letter-spacing: .3px;
     }
 
-    .subtitle {
-      margin-top: 6px;
-      font-size: 13px;
-      color: var(--muted);
+    .brand-title span {
+      display: block;
+      font-size: 12px;
+      opacity: .78;
+      margin-top: 3px;
     }
 
-    .tabs {
+    .nav-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      opacity: .7;
+      margin: 22px 8px 10px;
+      font-weight: 700;
+    }
+
+    .nav {
       display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 18px 0 22px;
+      flex-direction: column;
+      gap: 6px;
     }
 
-    .tab-btn {
-      border: 1px solid var(--border);
-      background: var(--panel);
-      color: var(--text);
-      padding: 10px 14px;
-      border-radius: 999px;
+    .nav-btn {
+      border: 0;
+      background: transparent;
+      color: rgba(255,255,255,.86);
+      text-align: left;
+      padding: 12px 12px;
+      border-radius: 12px;
       cursor: pointer;
-      font-weight: 600;
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: .15s ease;
+    }
+
+    .nav-btn:hover {
+      background: rgba(255,255,255,.11);
+      color: #fff;
+    }
+
+    .nav-btn.active {
+      background: #ffffff;
+      color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-icon {
+      width: 22px;
+      text-align: center;
+    }
+
+    .sidebar-meta {
+      margin-top: 24px;
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.16);
+    }
+
+    .sidebar-meta div {
+      font-size: 12px;
+      line-height: 1.45;
+      opacity: .9;
+    }
+
+    .sidebar-meta strong {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 5px;
+      opacity: 1;
+    }
+
+    .main {
+      padding: 26px 32px 36px;
+      min-width: 0;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .page-title h1 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: -.4px;
+    }
+
+    .page-title p {
+      margin: 7px 0 0;
+      color: var(--muted);
       font-size: 13px;
     }
 
-    .tab-btn.active {
-      background: #222;
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 10px 13px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    .btn.primary {
+      border-color: var(--primary);
+      background: var(--primary);
       color: #fff;
-      border-color: #222;
+    }
+
+    .btn.primary:hover {
+      background: var(--primary-dark);
+      color: #fff;
+    }
+
+    .filter-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .filters-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr auto;
+      gap: 12px;
+      align-items: end;
+    }
+
+    .field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 6px;
+    }
+
+    .field select,
+    .field input {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px 11px;
+      outline: none;
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    .field select:focus,
+    .field input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(22,65,148,.12);
+    }
+
+    .section {
+      margin-top: 22px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 12px;
     }
 
     .section-title {
+      margin: 0;
       font-size: 15px;
       text-transform: uppercase;
       letter-spacing: .6px;
-      margin: 24px 0 12px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--border);
-      color: #444;
+      color: #344054;
+      font-weight: 800;
+    }
+
+    .section-sub {
+      color: var(--muted);
+      font-size: 12px;
     }
 
     .kpi-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
+      gap: 14px;
     }
 
     .kpi-card {
-      background: var(--panel-soft);
-      border: 1px solid transparent;
+      background: var(--surface);
+      border: 1px solid var(--border-soft);
       border-radius: var(--radius);
-      padding: 16px;
-      min-height: 92px;
+      padding: 17px;
+      min-height: 122px;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
     }
+
+    .kpi-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 4px;
+      background: var(--primary);
+      opacity: .85;
+    }
+
+    .kpi-card.success::before { background: var(--success); }
+    .kpi-card.danger::before { background: var(--danger); }
+    .kpi-card.warning::before { background: var(--warning); }
+    .kpi-card.purple::before { background: var(--purple); }
 
     .kpi-label {
-      font-size: 13px;
-      color: #333;
-      margin-bottom: 8px;
-    }
-
-    .kpi-value {
-      font-size: 25px;
-      font-weight: 700;
-      line-height: 1.1;
-    }
-
-    .kpi-sub {
-      margin-top: 8px;
-      font-size: 12px;
       color: var(--muted);
-    }
-
-    .blue { color: var(--blue); }
-    .green { color: var(--green); }
-    .red { color: var(--red); }
-    .orange { color: var(--orange); }
-    .purple { color: var(--purple); }
-
-    .panel {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 18px;
-      margin-top: 14px;
-    }
-
-    .panel-title {
-      font-size: 14px;
-      font-weight: 700;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .45px;
       margin-bottom: 10px;
     }
 
-    .placeholder {
-      height: 220px;
-      border: 1px dashed var(--border);
+    .kpi-value {
+      font-size: 28px;
+      font-weight: 850;
+      line-height: 1.05;
+      color: var(--text);
+      letter-spacing: -.6px;
+    }
+
+    .kpi-card.primary .kpi-value { color: var(--primary); }
+    .kpi-card.success .kpi-value { color: var(--success); }
+    .kpi-card.danger .kpi-value { color: var(--danger); }
+    .kpi-card.warning .kpi-value { color: var(--warning); }
+    .kpi-card.purple .kpi-value { color: var(--purple); }
+
+    .kpi-sub {
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      padding: 17px;
+      min-width: 0;
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 850;
+      margin: 0 0 14px;
+      color: #344054;
+    }
+
+    .chart-box {
+      position: relative;
+      height: 300px;
+      width: 100%;
+    }
+
+    .chart-box.small {
+      height: 250px;
+    }
+
+    .chart-box.tall {
+      height: 390px;
+    }
+
+    .table-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    .table-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border-soft);
+      background: var(--surface-soft);
+    }
+
+    .table-title {
+      font-weight: 850;
+      color: #344054;
+      font-size: 14px;
+    }
+
+    .table-info {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      max-width: 100%;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 900px;
+    }
+
+    th {
+      background: #fbfcfe;
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .45px;
+      text-align: left;
+      padding: 12px 13px;
+      border-bottom: 1px solid var(--border-soft);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 12px 13px;
+      border-bottom: 1px solid var(--border-soft);
+      font-size: 13px;
+      vertical-align: top;
+      color: #344054;
+    }
+
+    tbody tr:hover {
+      background: #f9fbff;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 5px 9px;
+      font-size: 11px;
+      font-weight: 850;
+      border: 1px solid var(--border);
+      white-space: nowrap;
+      background: #fff;
+      color: var(--muted);
+    }
+
+    .badge.realizado {
+      color: #027a48;
+      background: var(--success-soft);
+      border-color: #a6f4c5;
+    }
+
+    .badge.cancelado {
+      color: #b42318;
+      background: var(--danger-soft);
+      border-color: #fecdca;
+    }
+
+    .badge.atual {
+      color: #175cd3;
+      background: #eff8ff;
+      border-color: #b2ddff;
+    }
+
+    .badge.confirmado {
+      color: #5925dc;
+      background: var(--purple-soft);
+      border-color: #d9d6fe;
+    }
+
+    .badge.livre {
+      color: #344054;
+      background: #f2f4f7;
+      border-color: #eaecf0;
+    }
+
+    .pagination {
       display: flex;
       align-items: center;
-      justify-content: center;
-      color: var(--muted);
-      font-size: 14px;
-      background: #fff;
+      justify-content: space-between;
+      padding: 12px 16px;
+      gap: 10px;
+      background: var(--surface-soft);
     }
 
-    .summary-grid {
+    .pagination-controls {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .pg-btn {
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      border-radius: 9px;
+      padding: 7px 10px;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 12px;
+    }
+
+    .pg-btn:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+    }
+
+    .empty {
+      padding: 26px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .metric-list {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 12px;
+      gap: 10px;
     }
 
-    .summary-box {
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 14px;
-      background: #fff;
+    .metric-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: center;
+      border-bottom: 1px solid var(--border-soft);
+      padding-bottom: 10px;
     }
 
-    .summary-box strong {
-      display: block;
-      font-size: 22px;
-      margin-top: 4px;
+    .metric-row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
     }
 
-    .loader,
-    .error {
-      padding: 28px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      background: var(--panel);
+    .metric-row span {
       color: var(--muted);
+      font-size: 13px;
+    }
+
+    .metric-row strong {
+      font-size: 15px;
+    }
+
+    .sub-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .sub-tab {
+      border: 1px solid var(--border);
+      background: #fff;
+      padding: 8px 11px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 12px;
+    }
+
+    .sub-tab.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .loading, .error {
+      padding: 28px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
     }
 
     .error {
-      color: var(--red);
+      color: var(--danger);
     }
 
-    @media (max-width: 1000px) {
+    @media (max-width: 1180px) {
+      .app-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+        height: auto;
+      }
+
+      .nav {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .main {
+        padding: 22px;
+      }
+
+      .filters-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
       .kpi-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
-      .summary-grid {
+      .grid-2, .grid-3 {
         grid-template-columns: 1fr;
       }
     }
 
-    @media (max-width: 620px) {
-      .app {
-        padding: 14px;
+    @media (max-width: 680px) {
+      .nav {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        flex-direction: column;
+      }
+
+      .filters-grid {
+        grid-template-columns: 1fr;
       }
 
       .kpi-grid {
         grid-template-columns: 1fr;
       }
 
-      .title {
-        font-size: 22px;
+      .main {
+        padding: 16px;
+      }
+
+      .page-title h1 {
+        font-size: 23px;
+      }
+
+      .chart-box {
+        height: 260px;
       }
     }
   </style>
 </head>
 
 <body>
-  <main class="app">
-    <header class="topbar">
-      <h1 class="title">Dashboard Unidades Móveis</h1>
-      <div class="subtitle" id="subtitle">Carregando dados...</div>
-    </header>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">UM</div>
+        <div class="brand-title">
+          <strong>Unidades Móveis</strong>
+          <span>Dashboard Executivo</span>
+        </div>
+      </div>
 
-    <nav class="tabs">
-      <button class="tab-btn active" data-tab="geral">Visão Geral</button>
-      <button class="tab-btn" data-tab="historico">Histórico / Agenda</button>
-      <button class="tab-btn" data-tab="financeiro">Financeiro / Fretes</button>
-      <button class="tab-btn" data-tab="frota">Frota / Cenários</button>
-      <button class="tab-btn" data-tab="producao">Produção / Eficiência</button>
-      <button class="tab-btn" data-tab="analiticos">Analíticos</button>
-    </nav>
+      <div class="nav-label">Menu</div>
+      <nav class="nav">
+        <button class="nav-btn active" data-tab="geral"><span class="nav-icon">▣</span> Visão Geral</button>
+        <button class="nav-btn" data-tab="historico"><span class="nav-icon">▤</span> Histórico / Agenda</button>
+        <button class="nav-btn" data-tab="financeiro"><span class="nav-icon">R$</span> Financeiro / Fretes</button>
+        <button class="nav-btn" data-tab="frota"><span class="nav-icon">▦</span> Frota / Cenários</button>
+        <button class="nav-btn" data-tab="producao"><span class="nav-icon">◈</span> Produção / Eficiência</button>
+        <button class="nav-btn" data-tab="analiticos"><span class="nav-icon">☷</span> Analíticos</button>
+      </nav>
 
-    <div id="content" class="loader">Carregando JSON...</div>
-  </main>
+      <div class="sidebar-meta">
+        <strong>Dados</strong>
+        <div id="sideMeta">Carregando...</div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div class="page-title">
+          <h1 id="pageTitle">Dashboard Unidades Móveis</h1>
+          <p id="pageSubtitle">Carregando dados...</p>
+        </div>
+
+        <div class="actions">
+          <button class="btn" id="btnClearFilters">Limpar filtros</button>
+          <button class="btn primary" id="btnExportCurrent">Exportar visão atual</button>
+        </div>
+      </div>
+
+      <section class="filter-panel">
+        <div class="filters-grid">
+          <div class="field">
+            <label for="fAno">Ano</label>
+            <select id="fAno"><option value="">Todos</option></select>
+          </div>
+
+          <div class="field">
+            <label for="fStatus">Status</label>
+            <select id="fStatus"><option value="">Todos</option></select>
+          </div>
+
+          <div class="field">
+            <label for="fUnidade">Unidade móvel</label>
+            <select id="fUnidade"><option value="">Todas</option></select>
+          </div>
+
+          <div class="field">
+            <label for="fCidade">Cidade / Unidade solicitante</label>
+            <select id="fCidade"><option value="">Todas</option></select>
+          </div>
+
+          <div class="field">
+            <label for="fBusca">Busca geral</label>
+            <input id="fBusca" type="text" placeholder="Cidade, responsável, empresa, RN..." />
+          </div>
+        </div>
+      </section>
+
+      <div id="content" class="loading">Carregando JSON...</div>
+    </main>
+  </div>
 
   <script>
     const JSON_URL = 'data/unidades_moveis.json?v=' + Date.now();
 
     let DASH = null;
     let currentTab = 'geral';
+    let analiticoTipo = 'agenda';
+    let charts = [];
+    let agendaPage = 1;
+    let producaoPage = 1;
+    let financeiroPage = 1;
+    const PAGE_SIZE = 25;
 
     const $ = id => document.getElementById(id);
 
     async function init() {
       try {
         const response = await fetch(JSON_URL);
-
-        if (!response.ok) {
-          throw new Error('HTTP ' + response.status);
-        }
+        if (!response.ok) throw new Error('HTTP ' + response.status);
 
         DASH = await response.json();
 
         renderHeader();
-        bindTabs();
+        populateFilters();
+        bindEvents();
         renderTab('geral');
-
       } catch (error) {
         $('content').className = 'error';
         $('content').textContent = 'Erro ao carregar JSON: ' + error.message;
       }
     }
 
-    function renderHeader() {
-      const meta = DASH.metadata || {};
-      $('subtitle').textContent =
-        (meta.origem || 'Origem não informada') +
-        ' | Atualizado em: ' +
-        (meta.atualizadoEm || '-');
-    }
-
-    function bindTabs() {
-      document.querySelectorAll('.tab-btn').forEach(btn => {
+    function bindEvents() {
+      document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-          document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+          document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
           renderTab(btn.dataset.tab);
         });
+      });
+
+      ['fAno', 'fStatus', 'fUnidade', 'fCidade'].forEach(id => {
+        $(id).addEventListener('change', () => {
+          agendaPage = 1;
+          renderTab(currentTab);
+        });
+      });
+
+      $('fBusca').addEventListener('input', debounce(() => {
+        agendaPage = 1;
+        renderTab(currentTab);
+      }, 250));
+
+      $('btnClearFilters').addEventListener('click', () => {
+        ['fAno', 'fStatus', 'fUnidade', 'fCidade'].forEach(id => $(id).value = '');
+        $('fBusca').value = '';
+        agendaPage = 1;
+        renderTab(currentTab);
+      });
+
+      $('btnExportCurrent').addEventListener('click', exportCurrentView);
+    }
+
+    function renderHeader() {
+      const meta = DASH.metadata || {};
+      const totais = meta.totais || {};
+
+      $('pageSubtitle').textContent = `${meta.origem || '-'} | Atualizado em: ${meta.atualizadoEm || '-'}`;
+
+      $('sideMeta').innerHTML = `
+        Atualizado em:<br><strong>${esc(meta.atualizadoEm || '-')}</strong>
+        Registros agenda: <strong>${fmtInt(totais.agendaHistorico || 0)}</strong>
+        Financeiro: <strong>${fmtInt((totais.orcamento || 0) + (totais.contrato || 0) + (totais.analiseValores || 0))}</strong>
+        Produção: <strong>${fmtInt(totais.producao || 0)}</strong>
+      `;
+    }
+
+    function populateFilters() {
+      const agenda = DASH.data?.agendaHistorico || [];
+
+      fillSelect('fAno', unique(agenda.map(x => x.anoInicio).filter(Boolean)).sort((a,b) => a-b));
+      fillSelect('fStatus', unique(agenda.map(x => x.statusPadronizado).filter(Boolean)).sort(ptSort));
+      fillSelect('fUnidade', unique(agenda.map(x => x.unidadeMovel).filter(Boolean)).sort(ptSort));
+      fillSelect('fCidade', unique(agenda.map(x => x.unidadeSolicitante).filter(Boolean)).sort(ptSort));
+    }
+
+    function fillSelect(id, values) {
+      const select = $(id);
+      const first = select.querySelector('option');
+      select.innerHTML = '';
+      select.appendChild(first);
+
+      values.forEach(v => {
+        const opt = document.createElement('option');
+        opt.value = v;
+        opt.textContent = v;
+        select.appendChild(opt);
       });
     }
 
     function renderTab(tab) {
       currentTab = tab;
+      destroyCharts();
+
+      const titles = {
+        geral: 'Visão Geral',
+        historico: 'Histórico / Agenda',
+        financeiro: 'Financeiro / Fretes',
+        frota: 'Frota / Cenários',
+        producao: 'Produção / Eficiência',
+        analiticos: 'Analíticos'
+      };
+
+      $('pageTitle').textContent = titles[tab] || 'Dashboard Unidades Móveis';
 
       if (tab === 'geral') renderVisaoGeral();
       if (tab === 'historico') renderHistorico();
@@ -289,169 +881,921 @@
       if (tab === 'analiticos') renderAnaliticos();
     }
 
+    function getFilteredAgenda() {
+      const agenda = DASH.data?.agendaHistorico || [];
+      const ano = $('fAno').value;
+      const status = $('fStatus').value;
+      const unidade = $('fUnidade').value;
+      const cidade = $('fCidade').value;
+      const busca = norm($('fBusca').value);
+
+      return agenda.filter(item => {
+        if (ano && String(item.anoInicio) !== String(ano)) return false;
+        if (status && item.statusPadronizado !== status) return false;
+        if (unidade && item.unidadeMovel !== unidade) return false;
+        if (cidade && item.unidadeSolicitante !== cidade) return false;
+
+        if (busca) {
+          const text = norm([
+            item.unidadeMovel,
+            item.tipoUnidade,
+            item.unidadeSolicitante,
+            item.responsavel,
+            item.empresa,
+            item.rn,
+            item.nf,
+            item.statusPadronizado
+          ].join(' '));
+
+          if (!text.includes(busca)) return false;
+        }
+
+        return true;
+      });
+    }
+
     function renderVisaoGeral() {
-      const k = DASH.kpis?.geral || {};
+      const agenda = getFilteredAgenda();
+      const k = calcKpisAgenda(agenda);
+      const financeiro = DASH.kpis?.financeiro || {};
+      const producao = DASH.kpis?.producao || {};
       const meta = DASH.metadata?.totais || {};
 
       $('content').className = '';
       $('content').innerHTML = `
-        <h2 class="section-title">KPIs Gerais — Agenda / Histórico</h2>
+        <section class="section">
+          <div class="section-header">
+            <h2 class="section-title">Indicadores Executivos</h2>
+            <span class="section-sub">Base filtrada: ${fmtInt(agenda.length)} registro(s)</span>
+          </div>
 
-        <section class="kpi-grid">
-          ${kpi('Total de registros', fmtInt(k.totalRegistros), 'Agenda e histórico consolidados', 'blue')}
-          ${kpi('Realizados', fmtInt(k.realizados), pctText(k.realizados, k.totalRegistros) + ' do total', 'green')}
-          ${kpi('Cancelados', fmtInt(k.cancelados), pctText(k.cancelados, k.totalRegistros) + ' do total', 'red')}
-          ${kpi('Atuais / Confirmados', fmtInt((k.atuais || 0) + (k.confirmados || 0)), 'Atual: ' + fmtInt(k.atuais) + ' | Confirmado: ' + fmtInt(k.confirmados), 'purple')}
+          <div class="kpi-grid">
+            ${kpi('Total de deslocamentos', fmtInt(k.total), 'Agenda e histórico consolidados', 'primary')}
+            ${kpi('Realizados', fmtInt(k.realizados), pctText(k.realizados, k.total) + ' do total', 'success')}
+            ${kpi('Cancelados', fmtInt(k.cancelados), pctText(k.cancelados, k.total) + ' do total', 'danger')}
+            ${kpi('Atuais / Confirmados', fmtInt(k.atuais + k.confirmados), `Atual: ${fmtInt(k.atuais)} | Confirmado: ${fmtInt(k.confirmados)}`, 'purple')}
 
-          ${kpi('Faturamento total', fmtMoney(k.faturamentoTotal), 'Agenda / histórico', 'orange')}
-          ${kpi('Frete total', fmtMoney(k.freteTotal), 'Valores vinculados à agenda', 'orange')}
-          ${kpi('Frete médio', fmtMoney(k.freteMedio), 'Média por registro com frete', '')}
-          ${kpi('Unidades móveis', fmtInt(k.unidadesMoveis), 'Unidades distintas', '')}
+            ${kpi('Faturamento total', fmtMoney(k.faturamentoTotal), 'Valor contratado informado', 'warning')}
+            ${kpi('Frete total', fmtMoney(k.freteTotal), 'Fretes vinculados à agenda', 'warning')}
+            ${kpi('Frete médio', fmtMoney(k.freteMedio), 'Média por registro com frete', '')}
+            ${kpi('Unidades móveis', fmtInt(k.unidades), 'Unidades distintas', '')}
 
-          ${kpi('Escola Móvel', pct(k.percentualEscolaMovel), fmtInt(k.escolaMovelSim) + ' registro(s) marcados como Sim', 'green')}
-          ${kpi('Cidade mais atendida', esc(k.cidadeTop || '-'), 'Top cidade por quantidade', 'blue')}
-          ${kpi('Produção 2025', fmtInt(DASH.kpis?.producao?.registros), 'Registros de produção', '')}
-          ${kpi('Registros financeiros', fmtInt((meta.orcamento || 0) + (meta.contrato || 0) + (meta.analiseValores || 0)), 'Orçamento, contrato e análise', '')}
+            ${kpi('Escola Móvel', pct(k.percentualEscolaMovel), `${fmtInt(k.escolaSim)} registro(s) marcados como Sim`, 'success')}
+            ${kpi('Cidade mais atendida', esc(k.cidadeTop || '-'), 'Maior volume de atendimentos', 'primary')}
+            ${kpi('Produção 2025', fmtInt(producao.registros), 'Registros de produção', '')}
+            ${kpi('Registros financeiros', fmtInt((meta.orcamento || 0) + (meta.contrato || 0) + (meta.analiseValores || 0)), 'Orçamento, contrato e análise', '')}
+          </div>
         </section>
 
-        <h2 class="section-title">Resumo de Dados Carregados</h2>
+        <section class="section grid-2">
+          <div class="card">
+            <h3 class="card-title">Deslocamentos por ano</h3>
+            <div class="chart-box"><canvas id="chartAno"></canvas></div>
+          </div>
 
-        <section class="summary-grid">
-          ${summaryBox('Agenda / Histórico', meta.agendaHistorico)}
-          ${summaryBox('Cenários', meta.cenarios)}
-          ${summaryBox('Orçamento 2025', meta.orcamento)}
-          ${summaryBox('CT 28724 - Canto e Rohde', meta.contrato)}
-          ${summaryBox('Análise dos valores', meta.analiseValores)}
-          ${summaryBox('Produção 2025', meta.producao)}
+          <div class="card">
+            <h3 class="card-title">Status dos deslocamentos</h3>
+            <div class="chart-box"><canvas id="chartStatus"></canvas></div>
+          </div>
         </section>
 
-        <div class="panel">
-          <div class="panel-title">Próxima etapa</div>
-          <div class="placeholder">Base carregada. Próximo passo: inserir gráficos e tabelas por aba.</div>
-        </div>
+        <section class="section grid-2">
+          <div class="card">
+            <h3 class="card-title">Top 10 cidades por atendimento</h3>
+            <div class="chart-box tall"><canvas id="chartCidades"></canvas></div>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title">Resumo financeiro geral</h3>
+            <div class="metric-list">
+              ${metric('Previsto no contrato', fmtMoney(financeiro.previstoContrato))}
+              ${metric('Realizado no contrato', fmtMoney(financeiro.realizadoContrato))}
+              ${metric('Previsto no orçamento 2025', fmtMoney(financeiro.previstoOrcamento))}
+              ${metric('Realizado no orçamento 2025', fmtMoney(financeiro.realizadoOrcamento))}
+              ${metric('Orçado na análise dos valores', fmtMoney(financeiro.orcadoAnalise))}
+              ${metric('Real na análise dos valores', fmtMoney(financeiro.realAnalise))}
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          ${renderResumoUnidadesTable(agenda, 10)}
+        </section>
       `;
+
+      chartBar('chartAno', groupSumCount(agenda, 'anoInicio'), 'Registros');
+      chartDoughnut('chartStatus', groupCount(agenda, 'statusPadronizado').slice(0, 8));
+      chartHorizontalBar('chartCidades', groupCount(agenda, 'unidadeSolicitante').filter(x => x.nome !== 'Não informado').slice(0, 10), 'Atendimentos');
     }
 
     function renderHistorico() {
-      const total = DASH.data?.agendaHistorico?.length || 0;
+      const agenda = getFilteredAgenda();
 
       $('content').className = '';
       $('content').innerHTML = `
-        <h2 class="section-title">Histórico / Agenda</h2>
-        <div class="panel">
-          <div class="panel-title">Base de agenda carregada</div>
-          <p>Total de registros: <strong>${fmtInt(total)}</strong></p>
-          <div class="placeholder">Aqui entrarão os gráficos de atendimentos por ano, status por ano e evolução histórica.</div>
-        </div>
+        <section class="section">
+          <div class="section-header">
+            <h2 class="section-title">Histórico / Agenda</h2>
+            <span class="section-sub">${fmtInt(agenda.length)} registro(s) no filtro atual</span>
+          </div>
+
+          <div class="kpi-grid">
+            ${kpi('Registros', fmtInt(agenda.length), 'Base filtrada', 'primary')}
+            ${kpi('Realizados', fmtInt(agenda.filter(x => x.statusPadronizado === 'Realizado').length), 'Status realizado', 'success')}
+            ${kpi('Cancelados', fmtInt(agenda.filter(x => x.statusPadronizado === 'Cancelado').length), 'Status cancelado', 'danger')}
+            ${kpi('Sem status', fmtInt(agenda.filter(x => x.statusPadronizado === 'Sem status').length), 'Registros sem classificação', 'warning')}
+          </div>
+        </section>
+
+        <section class="section grid-2">
+          <div class="card">
+            <h3 class="card-title">Faturamento por ano</h3>
+            <div class="chart-box"><canvas id="chartFatAno"></canvas></div>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title">Frete por ano</h3>
+            <div class="chart-box"><canvas id="chartFreteAno"></canvas></div>
+          </div>
+        </section>
+
+        <section class="section grid-2">
+          <div class="card">
+            <h3 class="card-title">Atendimentos por tipo de unidade</h3>
+            <div class="chart-box tall"><canvas id="chartTipoUnidade"></canvas></div>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title">Status consolidado</h3>
+            <div class="chart-box"><canvas id="chartStatusHistorico"></canvas></div>
+          </div>
+        </section>
+
+        <section class="section">
+          ${renderResumoCidadesTable(agenda, 15)}
+        </section>
       `;
+
+      chartBar('chartFatAno', groupSum(agenda, 'anoInicio', 'faturamentoTotalNumero'), 'Faturamento');
+      chartBar('chartFreteAno', groupSum(agenda, 'anoInicio', 'valorFreteNumero'), 'Frete');
+      chartHorizontalBar('chartTipoUnidade', groupCount(agenda, 'tipoUnidade').filter(x => x.nome !== 'Não informado').slice(0, 15), 'Registros');
+      chartDoughnut('chartStatusHistorico', groupCount(agenda, 'statusPadronizado').slice(0, 8));
     }
 
     function renderFinanceiro() {
+      const orcamento = DASH.data?.financeiro?.orcamento || [];
+      const contrato = DASH.data?.financeiro?.contrato || [];
+      const analise = DASH.data?.financeiro?.analiseValores || [];
       const k = DASH.kpis?.financeiro || {};
 
       $('content').className = '';
       $('content').innerHTML = `
-        <h2 class="section-title">Financeiro / Fretes</h2>
+        <section class="section">
+          <div class="section-header">
+            <h2 class="section-title">Financeiro / Fretes</h2>
+            <span class="section-sub">Orçamento, contrato e análise mensal</span>
+          </div>
 
-        <section class="kpi-grid">
-          ${kpi('Registros orçamento', fmtInt(k.registrosOrcamento), 'Orçamento 2025', 'blue')}
-          ${kpi('Registros contrato', fmtInt(k.registrosContrato), 'CT 28724', 'blue')}
-          ${kpi('Previsto contrato', fmtMoney(k.previstoContrato), 'Canto e Rohde', 'orange')}
-          ${kpi('Realizado contrato', fmtMoney(k.realizadoContrato), 'Canto e Rohde', 'green')}
-          ${kpi('Previsto orçamento', fmtMoney(k.previstoOrcamento), 'Orçamento 2025', 'orange')}
-          ${kpi('Realizado orçamento', fmtMoney(k.realizadoOrcamento), 'Orçamento 2025', 'green')}
-          ${kpi('Orçado análise', fmtMoney(k.orcadoAnalise), 'Análise dos valores', 'orange')}
-          ${kpi('Real análise', fmtMoney(k.realAnalise), 'Análise dos valores', 'green')}
+          <div class="kpi-grid">
+            ${kpi('Registros orçamento', fmtInt(k.registrosOrcamento), 'Orçamento 2025', 'primary')}
+            ${kpi('Registros contrato', fmtInt(k.registrosContrato), 'CT 28724 - Canto e Rohde', 'primary')}
+            ${kpi('Previsto contrato', fmtMoney(k.previstoContrato), 'Valor previsto', 'warning')}
+            ${kpi('Realizado contrato', fmtMoney(k.realizadoContrato), 'Valor realizado', 'success')}
+
+            ${kpi('Previsto orçamento', fmtMoney(k.previstoOrcamento), 'Orçamento 2025', 'warning')}
+            ${kpi('Realizado orçamento', fmtMoney(k.realizadoOrcamento), 'Orçamento 2025', 'success')}
+            ${kpi('Orçado análise', fmtMoney(k.orcadoAnalise), 'Análise dos valores', 'warning')}
+            ${kpi('Real análise', fmtMoney(k.realAnalise), 'Análise dos valores', 'success')}
+          </div>
         </section>
 
-        <div class="panel">
-          <div class="panel-title">Gráficos financeiros</div>
-          <div class="placeholder">Aqui entrarão faturamento, fretes, previsto x realizado e análise mensal.</div>
-        </div>
+        <section class="section grid-2">
+          <div class="card">
+            <h3 class="card-title">Previsto x Realizado — Contrato</h3>
+            <div class="chart-box"><canvas id="chartContrato"></canvas></div>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title">Previsto x Realizado — Orçamento</h3>
+            <div class="chart-box"><canvas id="chartOrcamento"></canvas></div>
+          </div>
+        </section>
+
+        <section class="section grid-2">
+          <div class="card">
+            <h3 class="card-title">Contrato — valor por unidade</h3>
+            <div class="chart-box tall"><canvas id="chartContratoUnidade"></canvas></div>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title">Análise dos valores — Real por mês</h3>
+            <div class="chart-box tall"><canvas id="chartAnaliseMes"></canvas></div>
+          </div>
+        </section>
+
+        <section class="section">
+          ${renderFinanceiroTable(contrato)}
+        </section>
       `;
+
+      chartBar('chartContrato', [
+        { nome: 'Previsto', valor: k.previstoContrato || 0 },
+        { nome: 'Realizado', valor: k.realizadoContrato || 0 }
+      ], 'Valor');
+
+      chartBar('chartOrcamento', [
+        { nome: 'Previsto', valor: k.previstoOrcamento || 0 },
+        { nome: 'Realizado', valor: k.realizadoOrcamento || 0 }
+      ], 'Valor');
+
+      chartHorizontalBar('chartContratoUnidade', groupSum(contrato, 'unidadeMovel', 'valorRealizadoNumero').slice(0, 15), 'Realizado');
+      chartBar('chartAnaliseMes', groupSum(analise, 'mesNumero', 'realNumero'), 'Real');
     }
 
     function renderFrota() {
-      const total = DASH.data?.cenarios?.length || 0;
-      const preenchidos = (DASH.data?.cenarios || []).filter(x => x.preenchido).length;
+      const cenarios = DASH.data?.cenarios || [];
+      const preenchidos = cenarios.filter(x => x.preenchido);
 
       $('content').className = '';
       $('content').innerHTML = `
-        <h2 class="section-title">Frota / Cenários</h2>
+        <section class="section">
+          <div class="section-header">
+            <h2 class="section-title">Frota / Cenários</h2>
+            <span class="section-sub">Planejamento 2023 a 2027</span>
+          </div>
 
-        <section class="kpi-grid">
-          ${kpi('Células de cenário', fmtInt(total), 'Unidade móvel x mês', 'blue')}
-          ${kpi('Células preenchidas', fmtInt(preenchidos), 'Com informação no cenário', 'green')}
-          ${kpi('Células vazias', fmtInt(total - preenchidos), 'Sem informação no cenário', '')}
-          ${kpi('Anos de cenário', '2023–2027', 'Planejamento carregado', 'purple')}
+          <div class="kpi-grid">
+            ${kpi('Células de cenário', fmtInt(cenarios.length), 'Unidade móvel x mês', 'primary')}
+            ${kpi('Células preenchidas', fmtInt(preenchidos.length), 'Com informação no cenário', 'success')}
+            ${kpi('Células vazias', fmtInt(cenarios.length - preenchidos.length), 'Sem preenchimento', '')}
+            ${kpi('Anos carregados', '2023–2027', 'Cenários disponíveis', 'purple')}
+          </div>
         </section>
 
-        <div class="panel">
-          <div class="panel-title">Mapa de ocupação</div>
-          <div class="placeholder">Aqui entrará a matriz/heatmap de unidade móvel x mês.</div>
-        </div>
+        <section class="section grid-2">
+          <div class="card">
+            <h3 class="card-title">Preenchimento por ano</h3>
+            <div class="chart-box"><canvas id="chartCenarioAno"></canvas></div>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title">Cenário por unidade móvel</h3>
+            <div class="chart-box tall"><canvas id="chartCenarioUnidade"></canvas></div>
+          </div>
+        </section>
+
+        <section class="section">
+          ${renderCenariosTable(cenarios)}
+        </section>
       `;
+
+      chartBar('chartCenarioAno', groupCount(preenchidos, 'ano'), 'Células preenchidas');
+      chartHorizontalBar('chartCenarioUnidade', groupCount(preenchidos, 'unidadeMovel').slice(0, 20), 'Células preenchidas');
     }
 
     function renderProducao() {
+      const producao = DASH.data?.producao || [];
       const k = DASH.kpis?.producao || {};
 
       $('content').className = '';
       $('content').innerHTML = `
-        <h2 class="section-title">Produção / Eficiência 2025</h2>
+        <section class="section">
+          <div class="section-header">
+            <h2 class="section-title">Produção / Eficiência 2025</h2>
+            <span class="section-sub">Módulo independente da agenda/frota</span>
+          </div>
 
-        <section class="kpi-grid">
-          ${kpi('Registros', fmtInt(k.registros), 'Produção 2025', 'blue')}
-          ${kpi('Unidades móveis', fmtInt(k.unidadesMoveis), 'Unidades com registro', '')}
-          ${kpi('Regionais', fmtInt(k.regionais), 'Regionais distintas', '')}
-          ${kpi('Cidades', fmtInt(k.cidades), 'Cidades de atendimento', '')}
-          ${kpi('Turmas preenchidas', fmtInt(k.turmasPreenchidas), 'Registros com turma', 'green')}
-          ${kpi('Carga horária', fmtInt(k.cargaHorariaTotal), 'Total informado', '')}
-          ${kpi('Valor total', fmtMoney(k.valorTotal), 'Total informado', 'orange')}
-          ${kpi('Matrículas', fmtInt(k.matriculasTotal), 'Total informado', 'purple')}
+          <div class="kpi-grid">
+            ${kpi('Registros', fmtInt(k.registros), 'Produção 2025', 'primary')}
+            ${kpi('Unidades móveis', fmtInt(k.unidadesMoveis), 'Unidades com registro', '')}
+            ${kpi('Regionais', fmtInt(k.regionais), 'Regionais distintas', '')}
+            ${kpi('Cidades', fmtInt(k.cidades), 'Cidades de atendimento', '')}
+
+            ${kpi('Turmas preenchidas', fmtInt(k.turmasPreenchidas), 'Registros com turma', 'success')}
+            ${kpi('Carga horária', fmtInt(k.cargaHorariaTotal), 'Total informado', '')}
+            ${kpi('Valor total', fmtMoney(k.valorTotal), 'Total informado', 'warning')}
+            ${kpi('Matrículas', fmtInt(k.matriculasTotal), 'Total informado', 'purple')}
+          </div>
         </section>
 
-        <div class="panel">
-          <div class="panel-title">Produção por unidade e regional</div>
-          <div class="placeholder">Aqui entrarão gráficos e tabela própria de produção.</div>
-        </div>
+        <section class="section grid-2">
+          <div class="card">
+            <h3 class="card-title">Produção por regional</h3>
+            <div class="chart-box"><canvas id="chartProdRegional"></canvas></div>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title">Produção por unidade móvel</h3>
+            <div class="chart-box"><canvas id="chartProdUnidade"></canvas></div>
+          </div>
+        </section>
+
+        <section class="section">
+          ${renderProducaoTable(producao)}
+        </section>
       `;
+
+      chartBar('chartProdRegional', groupCount(producao, 'regional'), 'Registros');
+      chartHorizontalBar('chartProdUnidade', groupCount(producao, 'unidadeMovel'), 'Registros');
     }
 
     function renderAnaliticos() {
+      const agenda = getFilteredAgenda();
+      const producao = DASH.data?.producao || [];
+
       $('content').className = '';
       $('content').innerHTML = `
-        <h2 class="section-title">Analíticos</h2>
+        <section class="section">
+          <div class="section-header">
+            <h2 class="section-title">Analíticos</h2>
+            <span class="section-sub">Tabelas detalhadas separadas por natureza de dado</span>
+          </div>
 
-        <div class="panel">
-          <div class="panel-title">Analítico Agenda / Frota / Fretes</div>
-          <div class="placeholder">Tabela detalhada paginada da agenda e histórico.</div>
-        </div>
+          <div class="sub-tabs">
+            <button class="sub-tab ${analiticoTipo === 'agenda' ? 'active' : ''}" data-analitico="agenda">Agenda / Frota / Fretes</button>
+            <button class="sub-tab ${analiticoTipo === 'producao' ? 'active' : ''}" data-analitico="producao">Produção</button>
+          </div>
 
-        <div class="panel">
-          <div class="panel-title">Analítico Produção</div>
-          <div class="placeholder">Tabela detalhada separada da produção.</div>
+          <div id="analiticoArea"></div>
+        </section>
+      `;
+
+      document.querySelectorAll('.sub-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+          analiticoTipo = btn.dataset.analitico;
+          agendaPage = 1;
+          producaoPage = 1;
+          renderAnaliticos();
+        });
+      });
+
+      if (analiticoTipo === 'agenda') {
+        $('analiticoArea').innerHTML = renderAgendaAnaliticoTable(agenda);
+        bindPagination('agenda', agenda.length);
+      } else {
+        $('analiticoArea').innerHTML = renderProducaoAnaliticoTable(producao);
+        bindPagination('producao', producao.length);
+      }
+    }
+
+    function renderResumoUnidadesTable(agenda, limit) {
+      const rows = resumoUnidades(agenda).slice(0, limit);
+
+      return tableCard(
+        'Resumo por unidade móvel',
+        `${fmtInt(rows.length)} unidade(s) exibida(s)`,
+        ['Unidade móvel', 'Tipo', 'Total', 'Realizados', 'Cancelados', 'Faturamento', 'Frete'],
+        rows.map(r => [
+          esc(r.unidadeMovel),
+          esc(r.tipoUnidade || '-'),
+          fmtInt(r.total),
+          fmtInt(r.realizados),
+          fmtInt(r.cancelados),
+          fmtMoney(r.faturamentoTotal),
+          fmtMoney(r.freteTotal)
+        ])
+      );
+    }
+
+    function renderResumoCidadesTable(agenda, limit) {
+      const rows = resumoCidades(agenda).slice(0, limit);
+
+      return tableCard(
+        'Resumo por cidade / unidade solicitante',
+        `${fmtInt(rows.length)} cidade(s) exibida(s)`,
+        ['Cidade', 'Total', 'Realizados', 'Cancelados', 'Faturamento', 'Frete'],
+        rows.map(r => [
+          esc(r.cidade),
+          fmtInt(r.total),
+          fmtInt(r.realizados),
+          fmtInt(r.cancelados),
+          fmtMoney(r.faturamentoTotal),
+          fmtMoney(r.freteTotal)
+        ])
+      );
+    }
+
+    function renderFinanceiroTable(rows) {
+      const limited = rows.slice(0, 25);
+
+      return tableCard(
+        'Últimos registros do contrato',
+        `${fmtInt(limited.length)} de ${fmtInt(rows.length)} registro(s)`,
+        ['Unidade móvel', 'RN', 'OF', 'Coleta', 'Entrega', 'Data', 'Previsto', 'Realizado', 'NF'],
+        limited.map(r => [
+          esc(r.unidadeMovel),
+          esc(r.rn),
+          esc(r.of),
+          esc(r.coleta),
+          esc(r.entrega),
+          esc(r.dataTransporte),
+          fmtMoney(r.valorPrevistoNumero),
+          fmtMoney(r.valorRealizadoNumero),
+          esc(r.nf)
+        ])
+      );
+    }
+
+    function renderCenariosTable(rows) {
+      const filled = rows.filter(x => x.preenchido).slice(0, 80);
+
+      return tableCard(
+        'Células preenchidas dos cenários',
+        `${fmtInt(filled.length)} registro(s) exibido(s)`,
+        ['Ano', 'Unidade móvel', 'Mês', 'Valor'],
+        filled.map(r => [
+          esc(r.ano),
+          esc(r.unidadeMovel),
+          esc(r.mes),
+          esc(r.valor)
+        ])
+      );
+    }
+
+    function renderProducaoTable(rows) {
+      return tableCard(
+        'Resumo de produção 2025',
+        `${fmtInt(rows.length)} registro(s)`,
+        ['Unidade móvel', 'Unidade SENAI', 'Regional', 'Cidade', 'Turma', 'Carga horária', 'Valor', 'Matrículas'],
+        rows.map(r => [
+          esc(r.unidadeMovel),
+          esc(r.unidadeSenai),
+          esc(r.regional),
+          esc(r.cidadeAtendimento),
+          esc(r.turma || '-'),
+          fmtInt(r.cargaHorariaNumero),
+          fmtMoney(r.valorNumero),
+          fmtInt(r.matriculasNumero)
+        ])
+      );
+    }
+
+    function renderAgendaAnaliticoTable(rows) {
+      const start = (agendaPage - 1) * PAGE_SIZE;
+      const pageRows = rows.slice(start, start + PAGE_SIZE);
+
+      return tableCard(
+        'Analítico Agenda / Frota / Fretes',
+        `${fmtInt(rows.length)} registro(s) filtrado(s)`,
+        ['Origem', 'Linha', 'Unidade móvel', 'Tipo', 'Cidade', 'Responsável', 'Início', 'Término', 'Status', 'Empresa', 'Faturamento', 'Frete', 'RN', 'NF'],
+        pageRows.map(r => [
+          esc(r.origem),
+          esc(r.linha),
+          esc(r.unidadeMovel || '-'),
+          esc(r.tipoUnidade || '-'),
+          esc(r.unidadeSolicitante || '-'),
+          esc(r.responsavel || '-'),
+          esc(r.inicio || '-'),
+          esc(r.termino || '-'),
+          statusBadge(r.statusPadronizado),
+          esc(r.empresa || '-'),
+          fmtMoney(r.faturamentoTotalNumero),
+          fmtMoney(r.valorFreteNumero),
+          esc(r.rn || '-'),
+          esc(r.nf || '-')
+        ]),
+        paginationHtml('agenda', rows.length, agendaPage)
+      );
+    }
+
+    function renderProducaoAnaliticoTable(rows) {
+      const start = (producaoPage - 1) * PAGE_SIZE;
+      const pageRows = rows.slice(start, start + PAGE_SIZE);
+
+      return tableCard(
+        'Analítico Produção',
+        `${fmtInt(rows.length)} registro(s)`,
+        ['Unidade móvel', 'Unidade SENAI', 'Regional', 'Cidade', 'Turma', 'Carga horária', 'Valor', 'Matrículas'],
+        pageRows.map(r => [
+          esc(r.unidadeMovel),
+          esc(r.unidadeSenai),
+          esc(r.regional),
+          esc(r.cidadeAtendimento),
+          esc(r.turma || '-'),
+          fmtInt(r.cargaHorariaNumero),
+          fmtMoney(r.valorNumero),
+          fmtInt(r.matriculasNumero)
+        ]),
+        paginationHtml('producao', rows.length, producaoPage)
+      );
+    }
+
+    function tableCard(title, info, headers, rows, pagination = '') {
+      const body = rows.length
+        ? rows.map(row => `<tr>${row.map(cell => `<td>${cell}</td>`).join('')}</tr>`).join('')
+        : `<tr><td colspan="${headers.length}" class="empty">Nenhum registro encontrado.</td></tr>`;
+
+      return `
+        <div class="table-card">
+          <div class="table-toolbar">
+            <div class="table-title">${esc(title)}</div>
+            <div class="table-info">${esc(info || '')}</div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>${headers.map(h => `<th>${esc(h)}</th>`).join('')}</tr>
+              </thead>
+              <tbody>${body}</tbody>
+            </table>
+          </div>
+          ${pagination}
         </div>
       `;
     }
 
-    function kpi(label, value, sub, colorClass) {
+    function paginationHtml(type, total, page) {
+      const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+
       return `
-        <article class="kpi-card">
+        <div class="pagination">
+          <div class="table-info">Página ${fmtInt(page)} de ${fmtInt(pages)}</div>
+          <div class="pagination-controls">
+            <button class="pg-btn" data-page-type="${type}" data-dir="-1" ${page <= 1 ? 'disabled' : ''}>Anterior</button>
+            <button class="pg-btn" data-page-type="${type}" data-dir="1" ${page >= pages ? 'disabled' : ''}>Próxima</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function bindPagination(type, total) {
+      document.querySelectorAll(`[data-page-type="${type}"]`).forEach(btn => {
+        btn.addEventListener('click', () => {
+          const dir = Number(btn.dataset.dir);
+          const max = Math.max(1, Math.ceil(total / PAGE_SIZE));
+
+          if (type === 'agenda') {
+            agendaPage = Math.min(max, Math.max(1, agendaPage + dir));
+          }
+
+          if (type === 'producao') {
+            producaoPage = Math.min(max, Math.max(1, producaoPage + dir));
+          }
+
+          renderAnaliticos();
+        });
+      });
+    }
+
+    function kpi(label, value, sub, tone = '') {
+      return `
+        <article class="kpi-card ${tone}">
           <div class="kpi-label">${esc(label)}</div>
-          <div class="kpi-value ${colorClass || ''}">${value ?? '-'}</div>
+          <div class="kpi-value">${value ?? '-'}</div>
           <div class="kpi-sub">${esc(sub || '')}</div>
         </article>
       `;
     }
 
-    function summaryBox(label, value) {
+    function metric(label, value) {
       return `
-        <div class="summary-box">
+        <div class="metric-row">
           <span>${esc(label)}</span>
-          <strong>${fmtInt(value || 0)}</strong>
+          <strong>${value}</strong>
         </div>
       `;
+    }
+
+    function statusBadge(status) {
+      const s = String(status || 'Sem status');
+      const cls = norm(s).replace(/\s+/g, '-');
+      let mapped = '';
+
+      if (s === 'Realizado') mapped = 'realizado';
+      else if (s === 'Cancelado') mapped = 'cancelado';
+      else if (s === 'Atual') mapped = 'atual';
+      else if (s === 'Confirmado') mapped = 'confirmado';
+      else if (s === 'Livre') mapped = 'livre';
+      else mapped = cls;
+
+      return `<span class="badge ${mapped}">${esc(s)}</span>`;
+    }
+
+    function calcKpisAgenda(agenda) {
+      const total = agenda.length;
+      const realizados = agenda.filter(x => x.statusPadronizado === 'Realizado').length;
+      const cancelados = agenda.filter(x => x.statusPadronizado === 'Cancelado').length;
+      const atuais = agenda.filter(x => x.statusPadronizado === 'Atual').length;
+      const confirmados = agenda.filter(x => x.statusPadronizado === 'Confirmado').length;
+      const faturamentoTotal = sum(agenda, 'faturamentoTotalNumero');
+      const freteTotal = sum(agenda, 'valorFreteNumero');
+      const comFrete = agenda.filter(x => Number(x.valorFreteNumero || 0) > 0).length;
+      const freteMedio = comFrete ? freteTotal / comFrete : 0;
+      const unidades = unique(agenda.map(x => x.unidadeMovel).filter(Boolean)).length;
+      const escolaSim = agenda.filter(x => x.escolaMovelPadronizado === 'Sim').length;
+      const cidadeTop = groupCount(agenda, 'unidadeSolicitante').filter(x => x.nome !== 'Não informado')[0]?.nome || '';
+
+      return {
+        total,
+        realizados,
+        cancelados,
+        atuais,
+        confirmados,
+        faturamentoTotal,
+        freteTotal,
+        freteMedio,
+        unidades,
+        escolaSim,
+        percentualEscolaMovel: total ? escolaSim / total : 0,
+        cidadeTop
+      };
+    }
+
+    function resumoUnidades(agenda) {
+      const map = {};
+
+      agenda.forEach(item => {
+        const key = item.unidadeMovel || 'Não informado';
+
+        if (!map[key]) {
+          map[key] = {
+            unidadeMovel: key,
+            tipoUnidade: item.tipoUnidade || '',
+            total: 0,
+            realizados: 0,
+            cancelados: 0,
+            faturamentoTotal: 0,
+            freteTotal: 0
+          };
+        }
+
+        map[key].total++;
+        if (item.statusPadronizado === 'Realizado') map[key].realizados++;
+        if (item.statusPadronizado === 'Cancelado') map[key].cancelados++;
+        map[key].faturamentoTotal += Number(item.faturamentoTotalNumero || 0);
+        map[key].freteTotal += Number(item.valorFreteNumero || 0);
+      });
+
+      return Object.values(map).sort((a,b) => b.total - a.total);
+    }
+
+    function resumoCidades(agenda) {
+      const map = {};
+
+      agenda.forEach(item => {
+        const key = item.unidadeSolicitante || 'Não informado';
+
+        if (!map[key]) {
+          map[key] = {
+            cidade: key,
+            total: 0,
+            realizados: 0,
+            cancelados: 0,
+            faturamentoTotal: 0,
+            freteTotal: 0
+          };
+        }
+
+        map[key].total++;
+        if (item.statusPadronizado === 'Realizado') map[key].realizados++;
+        if (item.statusPadronizado === 'Cancelado') map[key].cancelados++;
+        map[key].faturamentoTotal += Number(item.faturamentoTotalNumero || 0);
+        map[key].freteTotal += Number(item.valorFreteNumero || 0);
+      });
+
+      return Object.values(map).sort((a,b) => b.total - a.total);
+    }
+
+    function groupCount(arr, field) {
+      const map = {};
+
+      arr.forEach(item => {
+        const key = item[field] || 'Não informado';
+        map[key] = (map[key] || 0) + 1;
+      });
+
+      return Object.keys(map)
+        .map(k => ({ nome: k, valor: map[k] }))
+        .sort((a,b) => b.valor - a.valor);
+    }
+
+    function groupSumCount(arr, field) {
+      return groupCount(arr, field)
+        .filter(x => x.nome !== 'Não informado')
+        .sort((a,b) => Number(a.nome) - Number(b.nome));
+    }
+
+    function groupSum(arr, groupField, valueField) {
+      const map = {};
+
+      arr.forEach(item => {
+        const key = item[groupField] || 'Não informado';
+        map[key] = (map[key] || 0) + Number(item[valueField] || 0);
+      });
+
+      return Object.keys(map)
+        .map(k => ({ nome: k, valor: map[k] }))
+        .filter(x => x.nome !== 'Não informado')
+        .sort((a,b) => {
+          const na = Number(a.nome);
+          const nb = Number(b.nome);
+          if (!isNaN(na) && !isNaN(nb)) return na - nb;
+          return String(a.nome).localeCompare(String(b.nome), 'pt-BR');
+        });
+    }
+
+    function chartBar(id, data, label) {
+      const ctx = $(id);
+      if (!ctx) return;
+
+      const chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: data.map(x => x.nome),
+          datasets: [{
+            label,
+            data: data.map(x => x.valor),
+            backgroundColor: '#164194',
+            borderRadius: 8,
+            maxBarThickness: 48
+          }]
+        },
+        options: baseChartOptions()
+      });
+
+      charts.push(chart);
+    }
+
+    function chartHorizontalBar(id, data, label) {
+      const ctx = $(id);
+      if (!ctx) return;
+
+      const chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: data.map(x => x.nome),
+          datasets: [{
+            label,
+            data: data.map(x => x.valor),
+            backgroundColor: '#164194',
+            borderRadius: 8,
+            maxBarThickness: 22
+          }]
+        },
+        options: {
+          ...baseChartOptions(),
+          indexAxis: 'y'
+        }
+      });
+
+      charts.push(chart);
+    }
+
+    function chartDoughnut(id, data) {
+      const ctx = $(id);
+      if (!ctx) return;
+
+      const colors = ['#039855', '#d92d20', '#164194', '#6941c6', '#dc6803', '#667085', '#12b76a', '#84adff'];
+
+      const chart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: data.map(x => x.nome),
+          datasets: [{
+            data: data.map(x => x.valor),
+            backgroundColor: colors,
+            borderColor: '#ffffff',
+            borderWidth: 3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                boxWidth: 12,
+                boxHeight: 12,
+                font: { size: 11, weight: '700' }
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: context => `${context.label}: ${fmtInt(context.raw)}`
+              }
+            }
+          }
+        }
+      });
+
+      charts.push(chart);
+    }
+
+    function baseChartOptions() {
+      return {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            callbacks: {
+              label: context => `${context.dataset.label || 'Valor'}: ${formatChartValue(context.raw)}`
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: '#edf0f5' },
+            ticks: {
+              color: '#667085',
+              font: { size: 11, weight: '700' }
+            }
+          },
+          y: {
+            grid: { color: '#edf0f5' },
+            ticks: {
+              color: '#667085',
+              font: { size: 11, weight: '700' }
+            }
+          }
+        }
+      };
+    }
+
+    function destroyCharts() {
+      charts.forEach(c => c.destroy());
+      charts = [];
+    }
+
+    function exportCurrentView() {
+      let rows = [];
+      let filename = 'dashboard_unidades_moveis.csv';
+
+      if (currentTab === 'producao') {
+        rows = DASH.data?.producao || [];
+        filename = 'producao_2025.csv';
+      } else if (currentTab === 'financeiro') {
+        rows = DASH.data?.financeiro?.contrato || [];
+        filename = 'financeiro_fretes.csv';
+      } else if (currentTab === 'frota') {
+        rows = DASH.data?.cenarios || [];
+        filename = 'cenarios_frota.csv';
+      } else {
+        rows = getFilteredAgenda();
+        filename = 'agenda_historico.csv';
+      }
+
+      exportCSV(rows, filename);
+    }
+
+    function exportCSV(rows, filename) {
+      if (!rows.length) {
+        alert('Não há registros para exportar.');
+        return;
+      }
+
+      const headers = Object.keys(rows[0]);
+      const csv = [
+        headers.join(';'),
+        ...rows.map(row => headers.map(h => csvCell(row[h])).join(';'))
+      ].join('\n');
+
+      const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+
+      link.href = URL.createObjectURL(blob);
+      link.download = filename;
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      URL.revokeObjectURL(link.href);
+    }
+
+    function csvCell(value) {
+      return '"' + String(value ?? '').replace(/"/g, '""') + '"';
+    }
+
+    function sum(arr, field) {
+      return arr.reduce((acc, item) => acc + Number(item[field] || 0), 0);
+    }
+
+    function unique(arr) {
+      return [...new Set(arr)];
+    }
+
+    function ptSort(a, b) {
+      return String(a).localeCompare(String(b), 'pt-BR', { sensitivity: 'base' });
+    }
+
+    function debounce(fn, delay) {
+      let timer = null;
+      return function(...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn.apply(this, args), delay);
+      };
+    }
+
+    function norm(value) {
+      return String(value || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .trim();
     }
 
     function fmtInt(n) {
@@ -473,9 +1817,15 @@
       }).format(Number(n || 0));
     }
 
-    function pctText(parte, total) {
+    function pctText(part, total) {
       if (!total) return '0%';
-      return pct(Number(parte || 0) / Number(total || 0));
+      return pct(Number(part || 0) / Number(total || 0));
+    }
+
+    function formatChartValue(value) {
+      const n = Number(value || 0);
+      if (Math.abs(n) >= 10000) return fmtMoney(n);
+      return fmtInt(n);
     }
 
     function esc(value) {
