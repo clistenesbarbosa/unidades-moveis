@@ -1,24 +1,492 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard Unidades Móveis</title>
+
+  <style>
+    :root {
+      --bg: #f7f7f5;
+      --panel: #ffffff;
+      --panel-soft: #faf9f5;
+      --border: #dedbd2;
+      --text: #252525;
+      --muted: #6b6b6b;
+      --blue: #1565c0;
+      --green: #0f9d68;
+      --red: #c62828;
+      --orange: #c77700;
+      --purple: #6a5acd;
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .app {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .topbar {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+      margin-bottom: 16px;
+    }
+
+    .title {
+      margin: 0;
+      font-size: 26px;
+      letter-spacing: .3px;
+    }
+
+    .subtitle {
+      margin-top: 6px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 18px 0 22px;
+    }
+
+    .tab-btn {
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .tab-btn.active {
+      background: #222;
+      color: #fff;
+      border-color: #222;
+    }
+
+    .section-title {
+      font-size: 15px;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      margin: 24px 0 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      color: #444;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .kpi-card {
+      background: var(--panel-soft);
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      padding: 16px;
+      min-height: 92px;
+    }
+
+    .kpi-label {
+      font-size: 13px;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    .kpi-value {
+      font-size: 25px;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    .kpi-sub {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .blue { color: var(--blue); }
+    .green { color: var(--green); }
+    .red { color: var(--red); }
+    .orange { color: var(--orange); }
+    .purple { color: var(--purple); }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-top: 14px;
+    }
+
+    .panel-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .placeholder {
+      height: 220px;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 14px;
+      background: #fff;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .summary-box {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      background: #fff;
+    }
+
+    .summary-box strong {
+      display: block;
+      font-size: 22px;
+      margin-top: 4px;
+    }
+
+    .loader,
+    .error {
+      padding: 28px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--panel);
+      color: var(--muted);
+    }
+
+    .error {
+      color: var(--red);
+    }
+
+    @media (max-width: 1000px) {
+      .kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .app {
+        padding: 14px;
+      }
+
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .title {
+        font-size: 22px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <h1>Dashboard Unidades Móveis</h1>
-  <p id="status">Carregando JSON...</p>
+  <main class="app">
+    <header class="topbar">
+      <h1 class="title">Dashboard Unidades Móveis</h1>
+      <div class="subtitle" id="subtitle">Carregando dados...</div>
+    </header>
+
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="geral">Visão Geral</button>
+      <button class="tab-btn" data-tab="historico">Histórico / Agenda</button>
+      <button class="tab-btn" data-tab="financeiro">Financeiro / Fretes</button>
+      <button class="tab-btn" data-tab="frota">Frota / Cenários</button>
+      <button class="tab-btn" data-tab="producao">Produção / Eficiência</button>
+      <button class="tab-btn" data-tab="analiticos">Analíticos</button>
+    </nav>
+
+    <div id="content" class="loader">Carregando JSON...</div>
+  </main>
 
   <script>
-    fetch('data/unidades_moveis.json')
-      .then(response => response.json())
-      .then(data => {
-        document.getElementById('status').textContent =
-          data.mensagem + ' | Atualizado em: ' + data.atualizadoEm;
-      })
-      .catch(error => {
-        document.getElementById('status').textContent =
-          'Erro ao carregar JSON: ' + error.message;
+    const JSON_URL = 'data/unidades_moveis.json?v=' + Date.now();
+
+    let DASH = null;
+    let currentTab = 'geral';
+
+    const $ = id => document.getElementById(id);
+
+    async function init() {
+      try {
+        const response = await fetch(JSON_URL);
+
+        if (!response.ok) {
+          throw new Error('HTTP ' + response.status);
+        }
+
+        DASH = await response.json();
+
+        renderHeader();
+        bindTabs();
+        renderTab('geral');
+
+      } catch (error) {
+        $('content').className = 'error';
+        $('content').textContent = 'Erro ao carregar JSON: ' + error.message;
+      }
+    }
+
+    function renderHeader() {
+      const meta = DASH.metadata || {};
+      $('subtitle').textContent =
+        (meta.origem || 'Origem não informada') +
+        ' | Atualizado em: ' +
+        (meta.atualizadoEm || '-');
+    }
+
+    function bindTabs() {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          renderTab(btn.dataset.tab);
+        });
       });
+    }
+
+    function renderTab(tab) {
+      currentTab = tab;
+
+      if (tab === 'geral') renderVisaoGeral();
+      if (tab === 'historico') renderHistorico();
+      if (tab === 'financeiro') renderFinanceiro();
+      if (tab === 'frota') renderFrota();
+      if (tab === 'producao') renderProducao();
+      if (tab === 'analiticos') renderAnaliticos();
+    }
+
+    function renderVisaoGeral() {
+      const k = DASH.kpis?.geral || {};
+      const meta = DASH.metadata?.totais || {};
+
+      $('content').className = '';
+      $('content').innerHTML = `
+        <h2 class="section-title">KPIs Gerais — Agenda / Histórico</h2>
+
+        <section class="kpi-grid">
+          ${kpi('Total de registros', fmtInt(k.totalRegistros), 'Agenda e histórico consolidados', 'blue')}
+          ${kpi('Realizados', fmtInt(k.realizados), pctText(k.realizados, k.totalRegistros) + ' do total', 'green')}
+          ${kpi('Cancelados', fmtInt(k.cancelados), pctText(k.cancelados, k.totalRegistros) + ' do total', 'red')}
+          ${kpi('Atuais / Confirmados', fmtInt((k.atuais || 0) + (k.confirmados || 0)), 'Atual: ' + fmtInt(k.atuais) + ' | Confirmado: ' + fmtInt(k.confirmados), 'purple')}
+
+          ${kpi('Faturamento total', fmtMoney(k.faturamentoTotal), 'Agenda / histórico', 'orange')}
+          ${kpi('Frete total', fmtMoney(k.freteTotal), 'Valores vinculados à agenda', 'orange')}
+          ${kpi('Frete médio', fmtMoney(k.freteMedio), 'Média por registro com frete', '')}
+          ${kpi('Unidades móveis', fmtInt(k.unidadesMoveis), 'Unidades distintas', '')}
+
+          ${kpi('Escola Móvel', pct(k.percentualEscolaMovel), fmtInt(k.escolaMovelSim) + ' registro(s) marcados como Sim', 'green')}
+          ${kpi('Cidade mais atendida', esc(k.cidadeTop || '-'), 'Top cidade por quantidade', 'blue')}
+          ${kpi('Produção 2025', fmtInt(DASH.kpis?.producao?.registros), 'Registros de produção', '')}
+          ${kpi('Registros financeiros', fmtInt((meta.orcamento || 0) + (meta.contrato || 0) + (meta.analiseValores || 0)), 'Orçamento, contrato e análise', '')}
+        </section>
+
+        <h2 class="section-title">Resumo de Dados Carregados</h2>
+
+        <section class="summary-grid">
+          ${summaryBox('Agenda / Histórico', meta.agendaHistorico)}
+          ${summaryBox('Cenários', meta.cenarios)}
+          ${summaryBox('Orçamento 2025', meta.orcamento)}
+          ${summaryBox('CT 28724 - Canto e Rohde', meta.contrato)}
+          ${summaryBox('Análise dos valores', meta.analiseValores)}
+          ${summaryBox('Produção 2025', meta.producao)}
+        </section>
+
+        <div class="panel">
+          <div class="panel-title">Próxima etapa</div>
+          <div class="placeholder">Base carregada. Próximo passo: inserir gráficos e tabelas por aba.</div>
+        </div>
+      `;
+    }
+
+    function renderHistorico() {
+      const total = DASH.data?.agendaHistorico?.length || 0;
+
+      $('content').className = '';
+      $('content').innerHTML = `
+        <h2 class="section-title">Histórico / Agenda</h2>
+        <div class="panel">
+          <div class="panel-title">Base de agenda carregada</div>
+          <p>Total de registros: <strong>${fmtInt(total)}</strong></p>
+          <div class="placeholder">Aqui entrarão os gráficos de atendimentos por ano, status por ano e evolução histórica.</div>
+        </div>
+      `;
+    }
+
+    function renderFinanceiro() {
+      const k = DASH.kpis?.financeiro || {};
+
+      $('content').className = '';
+      $('content').innerHTML = `
+        <h2 class="section-title">Financeiro / Fretes</h2>
+
+        <section class="kpi-grid">
+          ${kpi('Registros orçamento', fmtInt(k.registrosOrcamento), 'Orçamento 2025', 'blue')}
+          ${kpi('Registros contrato', fmtInt(k.registrosContrato), 'CT 28724', 'blue')}
+          ${kpi('Previsto contrato', fmtMoney(k.previstoContrato), 'Canto e Rohde', 'orange')}
+          ${kpi('Realizado contrato', fmtMoney(k.realizadoContrato), 'Canto e Rohde', 'green')}
+          ${kpi('Previsto orçamento', fmtMoney(k.previstoOrcamento), 'Orçamento 2025', 'orange')}
+          ${kpi('Realizado orçamento', fmtMoney(k.realizadoOrcamento), 'Orçamento 2025', 'green')}
+          ${kpi('Orçado análise', fmtMoney(k.orcadoAnalise), 'Análise dos valores', 'orange')}
+          ${kpi('Real análise', fmtMoney(k.realAnalise), 'Análise dos valores', 'green')}
+        </section>
+
+        <div class="panel">
+          <div class="panel-title">Gráficos financeiros</div>
+          <div class="placeholder">Aqui entrarão faturamento, fretes, previsto x realizado e análise mensal.</div>
+        </div>
+      `;
+    }
+
+    function renderFrota() {
+      const total = DASH.data?.cenarios?.length || 0;
+      const preenchidos = (DASH.data?.cenarios || []).filter(x => x.preenchido).length;
+
+      $('content').className = '';
+      $('content').innerHTML = `
+        <h2 class="section-title">Frota / Cenários</h2>
+
+        <section class="kpi-grid">
+          ${kpi('Células de cenário', fmtInt(total), 'Unidade móvel x mês', 'blue')}
+          ${kpi('Células preenchidas', fmtInt(preenchidos), 'Com informação no cenário', 'green')}
+          ${kpi('Células vazias', fmtInt(total - preenchidos), 'Sem informação no cenário', '')}
+          ${kpi('Anos de cenário', '2023–2027', 'Planejamento carregado', 'purple')}
+        </section>
+
+        <div class="panel">
+          <div class="panel-title">Mapa de ocupação</div>
+          <div class="placeholder">Aqui entrará a matriz/heatmap de unidade móvel x mês.</div>
+        </div>
+      `;
+    }
+
+    function renderProducao() {
+      const k = DASH.kpis?.producao || {};
+
+      $('content').className = '';
+      $('content').innerHTML = `
+        <h2 class="section-title">Produção / Eficiência 2025</h2>
+
+        <section class="kpi-grid">
+          ${kpi('Registros', fmtInt(k.registros), 'Produção 2025', 'blue')}
+          ${kpi('Unidades móveis', fmtInt(k.unidadesMoveis), 'Unidades com registro', '')}
+          ${kpi('Regionais', fmtInt(k.regionais), 'Regionais distintas', '')}
+          ${kpi('Cidades', fmtInt(k.cidades), 'Cidades de atendimento', '')}
+          ${kpi('Turmas preenchidas', fmtInt(k.turmasPreenchidas), 'Registros com turma', 'green')}
+          ${kpi('Carga horária', fmtInt(k.cargaHorariaTotal), 'Total informado', '')}
+          ${kpi('Valor total', fmtMoney(k.valorTotal), 'Total informado', 'orange')}
+          ${kpi('Matrículas', fmtInt(k.matriculasTotal), 'Total informado', 'purple')}
+        </section>
+
+        <div class="panel">
+          <div class="panel-title">Produção por unidade e regional</div>
+          <div class="placeholder">Aqui entrarão gráficos e tabela própria de produção.</div>
+        </div>
+      `;
+    }
+
+    function renderAnaliticos() {
+      $('content').className = '';
+      $('content').innerHTML = `
+        <h2 class="section-title">Analíticos</h2>
+
+        <div class="panel">
+          <div class="panel-title">Analítico Agenda / Frota / Fretes</div>
+          <div class="placeholder">Tabela detalhada paginada da agenda e histórico.</div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">Analítico Produção</div>
+          <div class="placeholder">Tabela detalhada separada da produção.</div>
+        </div>
+      `;
+    }
+
+    function kpi(label, value, sub, colorClass) {
+      return `
+        <article class="kpi-card">
+          <div class="kpi-label">${esc(label)}</div>
+          <div class="kpi-value ${colorClass || ''}">${value ?? '-'}</div>
+          <div class="kpi-sub">${esc(sub || '')}</div>
+        </article>
+      `;
+    }
+
+    function summaryBox(label, value) {
+      return `
+        <div class="summary-box">
+          <span>${esc(label)}</span>
+          <strong>${fmtInt(value || 0)}</strong>
+        </div>
+      `;
+    }
+
+    function fmtInt(n) {
+      return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 }).format(Number(n || 0));
+    }
+
+    function fmtMoney(n) {
+      return new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+        maximumFractionDigits: 0
+      }).format(Number(n || 0));
+    }
+
+    function pct(n) {
+      return new Intl.NumberFormat('pt-BR', {
+        style: 'percent',
+        maximumFractionDigits: 1
+      }).format(Number(n || 0));
+    }
+
+    function pctText(parte, total) {
+      if (!total) return '0%';
+      return pct(Number(parte || 0) / Number(total || 0));
+    }
+
+    function esc(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    init();
   </script>
 </body>
 </html>
