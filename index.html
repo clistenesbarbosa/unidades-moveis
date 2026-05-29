@@ -9,43 +9,41 @@
 
   <style>
     :root {
-      --bg: #f3f5f8;
+      --bg: #f5f6f8;
       --surface: #ffffff;
-      --surface-soft: #f8fafc;
-      --border: #d9dee7;
-      --border-soft: #edf0f5;
-      --text: #1f2937;
+      --surface-2: #f9fafb;
+      --line: #e1e5eb;
+      --line-soft: #eef1f5;
+      --text: #1f2933;
       --muted: #667085;
       --muted-2: #98a2b3;
 
-      --primary: #164194;
-      --primary-dark: #0f2f6f;
-      --primary-soft: #e9f1ff;
+      --primary: #1b4f9c;
+      --primary-2: #153f7e;
+      --primary-soft: #edf4ff;
 
-      --success: #039855;
-      --success-soft: #ecfdf3;
-      --danger: #d92d20;
-      --danger-soft: #fef3f2;
-      --warning: #dc6803;
-      --warning-soft: #fff7ed;
-      --purple: #6941c6;
-      --purple-soft: #f4f3ff;
+      --success: #16875a;
+      --danger: #b42318;
+      --warning: #b65c00;
+      --purple: #5b45b5;
 
-      --radius: 16px;
+      --shadow: 0 8px 22px rgba(16, 24, 40, .06);
+      --shadow-sm: 0 3px 10px rgba(16, 24, 40, .045);
+
+      --radius: 14px;
       --radius-sm: 10px;
-      --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-      --shadow-sm: 0 4px 12px rgba(15, 23, 42, 0.06);
     }
 
     * {
       box-sizing: border-box;
     }
 
-    html, body {
+    html,
+    body {
       margin: 0;
       padding: 0;
       min-height: 100%;
-      font-family: Inter, Arial, Helvetica, sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       background: var(--bg);
       color: var(--text);
     }
@@ -54,173 +52,77 @@
       overflow-x: hidden;
     }
 
-    .app-shell {
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      min-height: 100vh;
+    .page {
+      max-width: 1540px;
+      margin: 0 auto;
+      padding: 22px 28px 36px;
     }
 
-    .sidebar {
-      background: linear-gradient(180deg, #0f2f6f 0%, #164194 55%, #1d4fa8 100%);
-      color: #fff;
-      padding: 24px 18px;
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      overflow-y: auto;
-      box-shadow: var(--shadow);
-      z-index: 20;
+    .header {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      padding: 18px 20px;
+      margin-bottom: 16px;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: flex-start;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 4px 6px 22px;
-      border-bottom: 1px solid rgba(255,255,255,.18);
-      margin-bottom: 20px;
+      gap: 13px;
     }
 
     .brand-mark {
       width: 42px;
       height: 42px;
       border-radius: 12px;
-      background: rgba(255,255,255,.16);
-      border: 1px solid rgba(255,255,255,.25);
+      background: var(--primary-soft);
+      color: var(--primary);
+      border: 1px solid #d6e7ff;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 800;
-      letter-spacing: .5px;
-    }
-
-    .brand-title {
-      line-height: 1.15;
-    }
-
-    .brand-title strong {
-      display: block;
-      font-size: 15px;
-      letter-spacing: .3px;
-    }
-
-    .brand-title span {
-      display: block;
-      font-size: 12px;
-      opacity: .78;
-      margin-top: 3px;
-    }
-
-    .nav-label {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: .8px;
-      opacity: .7;
-      margin: 22px 8px 10px;
-      font-weight: 700;
-    }
-
-    .nav {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .nav-btn {
-      border: 0;
-      background: transparent;
-      color: rgba(255,255,255,.86);
-      text-align: left;
-      padding: 12px 12px;
-      border-radius: 12px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      transition: .15s ease;
-    }
-
-    .nav-btn:hover {
-      background: rgba(255,255,255,.11);
-      color: #fff;
-    }
-
-    .nav-btn.active {
-      background: #ffffff;
-      color: var(--primary);
-      box-shadow: var(--shadow-sm);
-    }
-
-    .nav-icon {
-      width: 22px;
-      text-align: center;
-    }
-
-    .sidebar-meta {
-      margin-top: 24px;
-      padding: 14px;
-      border-radius: 14px;
-      background: rgba(255,255,255,.1);
-      border: 1px solid rgba(255,255,255,.16);
-    }
-
-    .sidebar-meta div {
-      font-size: 12px;
-      line-height: 1.45;
-      opacity: .9;
-    }
-
-    .sidebar-meta strong {
-      display: block;
       font-size: 13px;
-      margin-bottom: 5px;
-      opacity: 1;
     }
 
-    .main {
-      padding: 26px 32px 36px;
-      min-width: 0;
-    }
-
-    .topbar {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 18px;
-      margin-bottom: 18px;
-    }
-
-    .page-title h1 {
+    .brand h1 {
       margin: 0;
-      font-size: 28px;
-      letter-spacing: -.4px;
+      font-size: 24px;
+      line-height: 1.15;
+      letter-spacing: -.25px;
     }
 
-    .page-title p {
-      margin: 7px 0 0;
+    .brand p {
+      margin: 5px 0 0;
       color: var(--muted);
-      font-size: 13px;
+      font-size: 12px;
     }
 
     .actions {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
       justify-content: flex-end;
     }
 
     .btn {
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text);
-      border-radius: 12px;
-      padding: 10px 13px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: #344054;
+      border-radius: 10px;
+      padding: 9px 12px;
+      font-size: 12px;
       font-weight: 700;
       cursor: pointer;
-      box-shadow: var(--shadow-sm);
-      font-size: 13px;
       white-space: nowrap;
     }
 
@@ -231,38 +133,69 @@
     }
 
     .btn.primary {
-      border-color: var(--primary);
       background: var(--primary);
+      border-color: var(--primary);
       color: #fff;
     }
 
     .btn.primary:hover {
-      background: var(--primary-dark);
+      background: var(--primary-2);
       color: #fff;
     }
 
-    .filter-panel {
+    .tabs {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+      padding-top: 15px;
+      border-top: 1px solid var(--line-soft);
+    }
+
+    .tab {
+      border: 1px solid var(--line);
+      background: var(--surface-2);
+      color: #344054;
+      border-radius: 10px;
+      padding: 9px 12px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .tab:hover {
+      border-color: #b9c4d3;
+      background: #fff;
+    }
+
+    .tab.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .filters {
       background: var(--surface);
-      border: 1px solid var(--border);
+      border: 1px solid var(--line);
       border-radius: var(--radius);
       box-shadow: var(--shadow-sm);
       padding: 16px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .filters-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr auto;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 12px;
       align-items: end;
     }
 
     .field label {
       display: block;
-      font-size: 11px;
+      font-size: 10px;
+      text-transform: uppercase;
       font-weight: 800;
       color: var(--muted);
-      text-transform: uppercase;
       letter-spacing: .5px;
       margin-bottom: 6px;
     }
@@ -270,182 +203,206 @@
     .field select,
     .field input {
       width: 100%;
-      border: 1px solid var(--border);
+      border: 1px solid var(--line);
+      border-radius: 10px;
       background: #fff;
-      border-radius: 12px;
-      padding: 10px 11px;
+      padding: 9px 10px;
+      font-size: 12px;
       outline: none;
-      font-size: 13px;
       color: var(--text);
     }
 
     .field select:focus,
     .field input:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(22,65,148,.12);
+      box-shadow: 0 0 0 3px rgba(27, 79, 156, .10);
     }
 
     .section {
-      margin-top: 22px;
+      margin-top: 18px;
     }
 
-    .section-header {
+    .section-head {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 12px;
+      align-items: end;
+      gap: 12px;
+      margin: 0 0 10px;
     }
 
     .section-title {
       margin: 0;
-      font-size: 15px;
+      color: #263444;
+      font-size: 14px;
       text-transform: uppercase;
-      letter-spacing: .6px;
-      color: #344054;
+      letter-spacing: .65px;
       font-weight: 800;
     }
 
-    .section-sub {
+    .section-note {
       color: var(--muted);
       font-size: 12px;
+      text-align: right;
     }
 
     .kpi-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 14px;
+      gap: 12px;
     }
 
-    .kpi-card {
+    .kpi {
       background: var(--surface);
-      border: 1px solid var(--border-soft);
+      border: 1px solid var(--line);
       border-radius: var(--radius);
-      padding: 17px;
-      min-height: 122px;
       box-shadow: var(--shadow-sm);
-      position: relative;
-      overflow: hidden;
+      padding: 15px 15px 14px;
+      min-height: 104px;
     }
-
-    .kpi-card::before {
-      content: "";
-      position: absolute;
-      inset: 0 auto 0 0;
-      width: 4px;
-      background: var(--primary);
-      opacity: .85;
-    }
-
-    .kpi-card.success::before { background: var(--success); }
-    .kpi-card.danger::before { background: var(--danger); }
-    .kpi-card.warning::before { background: var(--warning); }
-    .kpi-card.purple::before { background: var(--purple); }
 
     .kpi-label {
       color: var(--muted);
-      font-size: 12px;
-      font-weight: 800;
+      font-size: 10.5px;
       text-transform: uppercase;
-      letter-spacing: .45px;
-      margin-bottom: 10px;
+      letter-spacing: .55px;
+      font-weight: 800;
+      margin-bottom: 9px;
     }
 
     .kpi-value {
-      font-size: 28px;
-      font-weight: 850;
+      color: #111827;
+      font-size: 24px;
       line-height: 1.05;
-      color: var(--text);
-      letter-spacing: -.6px;
+      font-weight: 800;
+      letter-spacing: -.4px;
     }
 
-    .kpi-card.primary .kpi-value { color: var(--primary); }
-    .kpi-card.success .kpi-value { color: var(--success); }
-    .kpi-card.danger .kpi-value { color: var(--danger); }
-    .kpi-card.warning .kpi-value { color: var(--warning); }
-    .kpi-card.purple .kpi-value { color: var(--purple); }
+    .kpi.primary .kpi-value { color: var(--primary); }
+    .kpi.success .kpi-value { color: var(--success); }
+    .kpi.danger .kpi-value { color: var(--danger); }
+    .kpi.warning .kpi-value { color: var(--warning); }
+    .kpi.purple .kpi-value { color: var(--purple); }
 
     .kpi-sub {
-      margin-top: 10px;
-      font-size: 12px;
+      margin-top: 8px;
       color: var(--muted);
+      font-size: 11.5px;
       line-height: 1.35;
     }
 
     .grid-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 14px;
+      gap: 12px;
     }
 
     .grid-3 {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      gap: 14px;
+      gap: 12px;
     }
 
     .card {
       background: var(--surface);
-      border: 1px solid var(--border);
+      border: 1px solid var(--line);
       border-radius: var(--radius);
       box-shadow: var(--shadow-sm);
-      padding: 17px;
+      padding: 15px;
       min-width: 0;
     }
 
     .card-title {
-      font-size: 14px;
-      font-weight: 850;
-      margin: 0 0 14px;
-      color: #344054;
+      margin: 0 0 12px;
+      color: #263444;
+      font-size: 13px;
+      font-weight: 800;
     }
 
     .chart-box {
       position: relative;
-      height: 300px;
-      width: 100%;
-    }
-
-    .chart-box.small {
-      height: 250px;
+      height: 280px;
     }
 
     .chart-box.tall {
-      height: 390px;
+      height: 360px;
+    }
+
+    .empty-state {
+      background: var(--surface);
+      border: 1px dashed #cfd6e1;
+      border-radius: var(--radius);
+      padding: 22px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .empty-state strong {
+      color: #344054;
+    }
+
+    .metric-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .metric {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line-soft);
+      align-items: center;
+    }
+
+    .metric:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .metric strong {
+      font-size: 13px;
+      color: #263444;
+      text-align: right;
     }
 
     .table-card {
       background: var(--surface);
-      border: 1px solid var(--border);
+      border: 1px solid var(--line);
       border-radius: var(--radius);
       box-shadow: var(--shadow-sm);
       overflow: hidden;
     }
 
-    .table-toolbar {
+    .table-top {
       display: flex;
       justify-content: space-between;
-      align-items: center;
       gap: 12px;
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border-soft);
-      background: var(--surface-soft);
+      align-items: center;
+      padding: 13px 15px;
+      background: var(--surface-2);
+      border-bottom: 1px solid var(--line-soft);
     }
 
     .table-title {
-      font-weight: 850;
-      color: #344054;
-      font-size: 14px;
+      color: #263444;
+      font-size: 13px;
+      font-weight: 800;
     }
 
     .table-info {
       color: var(--muted);
-      font-size: 12px;
+      font-size: 11.5px;
+      text-align: right;
     }
 
     .table-wrap {
       overflow-x: auto;
-      max-width: 100%;
     }
 
     table {
@@ -455,97 +412,88 @@
     }
 
     th {
-      background: #fbfcfe;
+      background: #fff;
+      border-bottom: 1px solid var(--line-soft);
       color: var(--muted);
-      font-size: 11px;
+      text-align: left;
+      padding: 11px 12px;
+      font-size: 10.5px;
       text-transform: uppercase;
       letter-spacing: .45px;
-      text-align: left;
-      padding: 12px 13px;
-      border-bottom: 1px solid var(--border-soft);
       white-space: nowrap;
     }
 
     td {
-      padding: 12px 13px;
-      border-bottom: 1px solid var(--border-soft);
-      font-size: 13px;
-      vertical-align: top;
+      border-bottom: 1px solid var(--line-soft);
+      padding: 11px 12px;
       color: #344054;
+      font-size: 12px;
+      vertical-align: top;
     }
 
     tbody tr:hover {
-      background: #f9fbff;
+      background: #fafcff;
     }
 
     .badge {
       display: inline-flex;
-      align-items: center;
+      padding: 4px 8px;
       border-radius: 999px;
-      padding: 5px 9px;
-      font-size: 11px;
-      font-weight: 850;
-      border: 1px solid var(--border);
-      white-space: nowrap;
+      border: 1px solid var(--line);
       background: #fff;
-      color: var(--muted);
+      color: #475467;
+      font-size: 10.5px;
+      font-weight: 800;
+      white-space: nowrap;
     }
 
     .badge.realizado {
-      color: #027a48;
-      background: var(--success-soft);
-      border-color: #a6f4c5;
+      background: #ecfdf3;
+      border-color: #abefc6;
+      color: #067647;
     }
 
     .badge.cancelado {
-      color: #b42318;
-      background: var(--danger-soft);
+      background: #fef3f2;
       border-color: #fecdca;
+      color: #b42318;
     }
 
     .badge.atual {
-      color: #175cd3;
       background: #eff8ff;
       border-color: #b2ddff;
+      color: #175cd3;
     }
 
     .badge.confirmado {
-      color: #5925dc;
-      background: var(--purple-soft);
+      background: #f4f3ff;
       border-color: #d9d6fe;
-    }
-
-    .badge.livre {
-      color: #344054;
-      background: #f2f4f7;
-      border-color: #eaecf0;
+      color: #5925dc;
     }
 
     .pagination {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      padding: 12px 16px;
-      gap: 10px;
-      background: var(--surface-soft);
+      align-items: center;
+      padding: 12px 15px;
+      background: var(--surface-2);
+      border-top: 1px solid var(--line-soft);
     }
 
-    .pagination-controls {
+    .pg-controls {
       display: flex;
       gap: 6px;
-      align-items: center;
-      flex-wrap: wrap;
     }
 
     .pg-btn {
-      border: 1px solid var(--border);
+      border: 1px solid var(--line);
       background: #fff;
-      color: var(--text);
-      border-radius: 9px;
+      color: #344054;
+      border-radius: 8px;
       padding: 7px 10px;
       cursor: pointer;
+      font-size: 11.5px;
       font-weight: 800;
-      font-size: 12px;
     }
 
     .pg-btn:disabled {
@@ -553,114 +501,71 @@
       cursor: not-allowed;
     }
 
-    .empty {
-      padding: 26px;
-      color: var(--muted);
-      text-align: center;
-    }
-
-    .metric-list {
-      display: grid;
-      gap: 10px;
-    }
-
-    .metric-row {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 14px;
-      align-items: center;
-      border-bottom: 1px solid var(--border-soft);
-      padding-bottom: 10px;
-    }
-
-    .metric-row:last-child {
-      border-bottom: 0;
-      padding-bottom: 0;
-    }
-
-    .metric-row span {
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .metric-row strong {
-      font-size: 15px;
-    }
-
-    .sub-tabs {
+    .subtabs {
       display: flex;
-      gap: 8px;
+      gap: 7px;
       flex-wrap: wrap;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
-    .sub-tab {
-      border: 1px solid var(--border);
+    .subtab {
+      border: 1px solid var(--line);
       background: #fff;
-      padding: 8px 11px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 800;
+      color: #344054;
+      border-radius: 9px;
+      padding: 8px 10px;
       font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
     }
 
-    .sub-tab.active {
+    .subtab.active {
       background: var(--primary);
       color: #fff;
       border-color: var(--primary);
     }
 
-    .loading, .error {
-      padding: 28px;
+    .loading,
+    .error {
       background: var(--surface);
-      border: 1px solid var(--border);
+      border: 1px solid var(--line);
       border-radius: var(--radius);
       box-shadow: var(--shadow-sm);
+      padding: 24px;
+      color: var(--muted);
+      font-size: 13px;
     }
 
     .error {
       color: var(--danger);
     }
 
-    @media (max-width: 1180px) {
-      .app-shell {
-        grid-template-columns: 1fr;
-      }
-
-      .sidebar {
-        position: static;
-        height: auto;
-      }
-
-      .nav {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-      }
-
-      .main {
-        padding: 22px;
-      }
-
+    @media (max-width: 1200px) {
       .filters-grid {
         grid-template-columns: 1fr 1fr;
       }
 
       .kpi-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: 1fr 1fr;
       }
 
-      .grid-2, .grid-3 {
+      .grid-2,
+      .grid-3 {
         grid-template-columns: 1fr;
       }
     }
 
-    @media (max-width: 680px) {
-      .nav {
-        grid-template-columns: 1fr;
+    @media (max-width: 700px) {
+      .page {
+        padding: 14px;
       }
 
-      .topbar {
+      .header-top {
         flex-direction: column;
+      }
+
+      .actions {
+        justify-content: flex-start;
       }
 
       .filters-grid {
@@ -671,15 +576,12 @@
         grid-template-columns: 1fr;
       }
 
-      .main {
-        padding: 16px;
+      .brand h1 {
+        font-size: 20px;
       }
 
-      .page-title h1 {
-        font-size: 23px;
-      }
-
-      .chart-box {
+      .chart-box,
+      .chart-box.tall {
         height: 260px;
       }
     }
@@ -687,37 +589,15 @@
 </head>
 
 <body>
-  <div class="app-shell">
-    <aside class="sidebar">
-      <div class="brand">
-        <div class="brand-mark">UM</div>
-        <div class="brand-title">
-          <strong>Unidades Móveis</strong>
-          <span>Dashboard Executivo</span>
-        </div>
-      </div>
-
-      <div class="nav-label">Menu</div>
-      <nav class="nav">
-        <button class="nav-btn active" data-tab="geral"><span class="nav-icon">▣</span> Visão Geral</button>
-        <button class="nav-btn" data-tab="historico"><span class="nav-icon">▤</span> Histórico / Agenda</button>
-        <button class="nav-btn" data-tab="financeiro"><span class="nav-icon">R$</span> Financeiro / Fretes</button>
-        <button class="nav-btn" data-tab="frota"><span class="nav-icon">▦</span> Frota / Cenários</button>
-        <button class="nav-btn" data-tab="producao"><span class="nav-icon">◈</span> Produção / Eficiência</button>
-        <button class="nav-btn" data-tab="analiticos"><span class="nav-icon">☷</span> Analíticos</button>
-      </nav>
-
-      <div class="sidebar-meta">
-        <strong>Dados</strong>
-        <div id="sideMeta">Carregando...</div>
-      </div>
-    </aside>
-
-    <main class="main">
-      <div class="topbar">
-        <div class="page-title">
-          <h1 id="pageTitle">Dashboard Unidades Móveis</h1>
-          <p id="pageSubtitle">Carregando dados...</p>
+  <main class="page">
+    <header class="header">
+      <div class="header-top">
+        <div class="brand">
+          <div class="brand-mark">UM</div>
+          <div>
+            <h1 id="pageTitle">Dashboard Unidades Móveis</h1>
+            <p id="pageSubtitle">Carregando dados...</p>
+          </div>
         </div>
 
         <div class="actions">
@@ -726,49 +606,58 @@
         </div>
       </div>
 
-      <section class="filter-panel">
-        <div class="filters-grid">
-          <div class="field">
-            <label for="fAno">Ano</label>
-            <select id="fAno"><option value="">Todos</option></select>
-          </div>
+      <nav class="tabs">
+        <button class="tab active" data-tab="geral">Visão Geral</button>
+        <button class="tab" data-tab="historico">Histórico / Agenda</button>
+        <button class="tab" data-tab="financeiro">Financeiro / Fretes</button>
+        <button class="tab" data-tab="frota">Frota / Cenários</button>
+        <button class="tab" data-tab="producao">Produção / Eficiência 2025</button>
+        <button class="tab" data-tab="analiticos">Analíticos</button>
+      </nav>
+    </header>
 
-          <div class="field">
-            <label for="fStatus">Status</label>
-            <select id="fStatus"><option value="">Todos</option></select>
-          </div>
-
-          <div class="field">
-            <label for="fUnidade">Unidade móvel</label>
-            <select id="fUnidade"><option value="">Todas</option></select>
-          </div>
-
-          <div class="field">
-            <label for="fCidade">Cidade / Unidade solicitante</label>
-            <select id="fCidade"><option value="">Todas</option></select>
-          </div>
-
-          <div class="field">
-            <label for="fBusca">Busca geral</label>
-            <input id="fBusca" type="text" placeholder="Cidade, responsável, empresa, RN..." />
-          </div>
+    <section class="filters">
+      <div class="filters-grid">
+        <div class="field">
+          <label for="fAno">Ano</label>
+          <select id="fAno"></select>
         </div>
-      </section>
 
-      <div id="content" class="loading">Carregando JSON...</div>
-    </main>
-  </div>
+        <div class="field">
+          <label for="fStatus">Status</label>
+          <select id="fStatus"></select>
+        </div>
+
+        <div class="field">
+          <label for="fUnidade">Unidade móvel</label>
+          <select id="fUnidade"></select>
+        </div>
+
+        <div class="field">
+          <label for="fCidade">Cidade / Unidade solicitante</label>
+          <select id="fCidade"></select>
+        </div>
+
+        <div class="field">
+          <label for="fBusca">Busca geral</label>
+          <input id="fBusca" type="text" placeholder="Cidade, responsável, empresa, RN..." />
+        </div>
+      </div>
+    </section>
+
+    <div id="content" class="loading">Carregando JSON...</div>
+  </main>
 
   <script>
     const JSON_URL = 'data/unidades_moveis.json?v=' + Date.now();
 
     let DASH = null;
     let currentTab = 'geral';
-    let analiticoTipo = 'agenda';
     let charts = [];
+    let analiticoTipo = 'agenda';
+
     let agendaPage = 1;
     let producaoPage = 1;
-    let financeiroPage = 1;
     const PAGE_SIZE = 25;
 
     const $ = id => document.getElementById(id);
@@ -791,9 +680,9 @@
     }
 
     function bindEvents() {
-      document.querySelectorAll('.nav-btn').forEach(btn => {
+      document.querySelectorAll('.tab').forEach(btn => {
         btn.addEventListener('click', () => {
-          document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+          document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
           renderTab(btn.dataset.tab);
         });
@@ -823,37 +712,26 @@
 
     function renderHeader() {
       const meta = DASH.metadata || {};
-      const totais = meta.totais || {};
-
       $('pageSubtitle').textContent = `${meta.origem || '-'} | Atualizado em: ${meta.atualizadoEm || '-'}`;
-
-      $('sideMeta').innerHTML = `
-        Atualizado em:<br><strong>${esc(meta.atualizadoEm || '-')}</strong>
-        Registros agenda: <strong>${fmtInt(totais.agendaHistorico || 0)}</strong>
-        Financeiro: <strong>${fmtInt((totais.orcamento || 0) + (totais.contrato || 0) + (totais.analiseValores || 0))}</strong>
-        Produção: <strong>${fmtInt(totais.producao || 0)}</strong>
-      `;
     }
 
     function populateFilters() {
       const agenda = DASH.data?.agendaHistorico || [];
 
-      fillSelect('fAno', unique(agenda.map(x => x.anoInicio).filter(Boolean)).sort((a,b) => a-b));
-      fillSelect('fStatus', unique(agenda.map(x => x.statusPadronizado).filter(Boolean)).sort(ptSort));
-      fillSelect('fUnidade', unique(agenda.map(x => x.unidadeMovel).filter(Boolean)).sort(ptSort));
-      fillSelect('fCidade', unique(agenda.map(x => x.unidadeSolicitante).filter(Boolean)).sort(ptSort));
+      setOptions('fAno', 'Todos', unique(agenda.map(x => x.anoInicio).filter(Boolean)).sort((a, b) => a - b));
+      setOptions('fStatus', 'Todos', unique(agenda.map(x => x.statusPadronizado).filter(Boolean)).sort(ptSort));
+      setOptions('fUnidade', 'Todas', unique(agenda.map(x => x.unidadeMovel).filter(Boolean)).sort(ptSort));
+      setOptions('fCidade', 'Todas', unique(agenda.map(x => x.unidadeSolicitante).filter(Boolean)).sort(ptSort));
     }
 
-    function fillSelect(id, values) {
+    function setOptions(id, labelAll, values) {
       const select = $(id);
-      const first = select.querySelector('option');
-      select.innerHTML = '';
-      select.appendChild(first);
+      select.innerHTML = `<option value="">${labelAll}</option>`;
 
-      values.forEach(v => {
+      values.forEach(value => {
         const opt = document.createElement('option');
-        opt.value = v;
-        opt.textContent = v;
+        opt.value = value;
+        opt.textContent = value;
         select.appendChild(opt);
       });
     }
@@ -867,7 +745,7 @@
         historico: 'Histórico / Agenda',
         financeiro: 'Financeiro / Fretes',
         frota: 'Frota / Cenários',
-        producao: 'Produção / Eficiência',
+        producao: 'Produção / Eficiência 2025',
         analiticos: 'Analíticos'
       };
 
@@ -897,6 +775,7 @@
 
         if (busca) {
           const text = norm([
+            item.origem,
             item.unidadeMovel,
             item.tipoUnidade,
             item.unidadeSolicitante,
@@ -917,22 +796,21 @@
     function renderVisaoGeral() {
       const agenda = getFilteredAgenda();
       const k = calcKpisAgenda(agenda);
-      const financeiro = DASH.kpis?.financeiro || {};
-      const producao = DASH.kpis?.producao || {};
       const meta = DASH.metadata?.totais || {};
+      const producao = DASH.kpis?.producao || {};
 
       $('content').className = '';
       $('content').innerHTML = `
         <section class="section">
-          <div class="section-header">
-            <h2 class="section-title">Indicadores Executivos</h2>
-            <span class="section-sub">Base filtrada: ${fmtInt(agenda.length)} registro(s)</span>
+          <div class="section-head">
+            <h2 class="section-title">Indicadores executivos</h2>
+            <div class="section-note">Base filtrada: ${fmtInt(agenda.length)} registro(s)</div>
           </div>
 
           <div class="kpi-grid">
             ${kpi('Total de deslocamentos', fmtInt(k.total), 'Agenda e histórico consolidados', 'primary')}
-            ${kpi('Realizados', fmtInt(k.realizados), pctText(k.realizados, k.total) + ' do total', 'success')}
-            ${kpi('Cancelados', fmtInt(k.cancelados), pctText(k.cancelados, k.total) + ' do total', 'danger')}
+            ${kpi('Realizados', fmtInt(k.realizados), `${pctText(k.realizados, k.total)} do total`, 'success')}
+            ${kpi('Cancelados', fmtInt(k.cancelados), `${pctText(k.cancelados, k.total)} do total`, 'danger')}
             ${kpi('Atuais / Confirmados', fmtInt(k.atuais + k.confirmados), `Atual: ${fmtInt(k.atuais)} | Confirmado: ${fmtInt(k.confirmados)}`, 'purple')}
 
             ${kpi('Faturamento total', fmtMoney(k.faturamentoTotal), 'Valor contratado informado', 'warning')}
@@ -942,7 +820,7 @@
 
             ${kpi('Escola Móvel', pct(k.percentualEscolaMovel), `${fmtInt(k.escolaSim)} registro(s) marcados como Sim`, 'success')}
             ${kpi('Cidade mais atendida', esc(k.cidadeTop || '-'), 'Maior volume de atendimentos', 'primary')}
-            ${kpi('Produção 2025', fmtInt(producao.registros), 'Registros de produção', '')}
+            ${kpi('Produção 2025', fmtInt(producao.registros), 'Registros na aba Produção 2025', '')}
             ${kpi('Registros financeiros', fmtInt((meta.orcamento || 0) + (meta.contrato || 0) + (meta.analiseValores || 0)), 'Orçamento, contrato e análise', '')}
           </div>
         </section>
@@ -966,26 +844,26 @@
           </div>
 
           <div class="card">
-            <h3 class="card-title">Resumo financeiro geral</h3>
+            <h3 class="card-title">Resumo de dados carregados</h3>
             <div class="metric-list">
-              ${metric('Previsto no contrato', fmtMoney(financeiro.previstoContrato))}
-              ${metric('Realizado no contrato', fmtMoney(financeiro.realizadoContrato))}
-              ${metric('Previsto no orçamento 2025', fmtMoney(financeiro.previstoOrcamento))}
-              ${metric('Realizado no orçamento 2025', fmtMoney(financeiro.realizadoOrcamento))}
-              ${metric('Orçado na análise dos valores', fmtMoney(financeiro.orcadoAnalise))}
-              ${metric('Real na análise dos valores', fmtMoney(financeiro.realAnalise))}
+              ${metric('Agenda / Histórico', fmtInt(meta.agendaHistorico || 0))}
+              ${metric('Cenários 2023 a 2027', fmtInt(meta.cenarios || 0))}
+              ${metric('Orçamento 2025', fmtInt(meta.orcamento || 0))}
+              ${metric('CT 28724 - Canto e Rohde', fmtInt(meta.contrato || 0))}
+              ${metric('Análise dos valores', fmtInt(meta.analiseValores || 0))}
+              ${metric('Produção 2025', fmtInt(meta.producao || 0))}
             </div>
           </div>
         </section>
 
         <section class="section">
-          ${renderResumoUnidadesTable(agenda, 10)}
+          ${renderResumoUnidadesTable(agenda, 12)}
         </section>
       `;
 
-      chartBar('chartAno', groupSumCount(agenda, 'anoInicio'), 'Registros');
+      chartBar('chartAno', groupCountByYear(agenda, 'anoInicio'), 'Registros', false);
       chartDoughnut('chartStatus', groupCount(agenda, 'statusPadronizado').slice(0, 8));
-      chartHorizontalBar('chartCidades', groupCount(agenda, 'unidadeSolicitante').filter(x => x.nome !== 'Não informado').slice(0, 10), 'Atendimentos');
+      chartHorizontalBar('chartCidades', groupCount(agenda, 'unidadeSolicitante').filter(x => x.nome !== 'Não informado').slice(0, 10), 'Atendimentos', false);
     }
 
     function renderHistorico() {
@@ -994,16 +872,16 @@
       $('content').className = '';
       $('content').innerHTML = `
         <section class="section">
-          <div class="section-header">
+          <div class="section-head">
             <h2 class="section-title">Histórico / Agenda</h2>
-            <span class="section-sub">${fmtInt(agenda.length)} registro(s) no filtro atual</span>
+            <div class="section-note">Anos diversos conforme abas de agenda e histórico</div>
           </div>
 
           <div class="kpi-grid">
-            ${kpi('Registros', fmtInt(agenda.length), 'Base filtrada', 'primary')}
-            ${kpi('Realizados', fmtInt(agenda.filter(x => x.statusPadronizado === 'Realizado').length), 'Status realizado', 'success')}
-            ${kpi('Cancelados', fmtInt(agenda.filter(x => x.statusPadronizado === 'Cancelado').length), 'Status cancelado', 'danger')}
-            ${kpi('Sem status', fmtInt(agenda.filter(x => x.statusPadronizado === 'Sem status').length), 'Registros sem classificação', 'warning')}
+            ${kpi('Registros filtrados', fmtInt(agenda.length), 'Base atual da consulta', 'primary')}
+            ${kpi('Realizados', fmtInt(countStatus(agenda, 'Realizado')), 'Registros com status realizado', 'success')}
+            ${kpi('Cancelados', fmtInt(countStatus(agenda, 'Cancelado')), 'Registros com status cancelado', 'danger')}
+            ${kpi('Sem status', fmtInt(countStatus(agenda, 'Sem status')), 'Registros sem classificação', 'warning')}
           </div>
         </section>
 
@@ -1036,9 +914,9 @@
         </section>
       `;
 
-      chartBar('chartFatAno', groupSum(agenda, 'anoInicio', 'faturamentoTotalNumero'), 'Faturamento');
-      chartBar('chartFreteAno', groupSum(agenda, 'anoInicio', 'valorFreteNumero'), 'Frete');
-      chartHorizontalBar('chartTipoUnidade', groupCount(agenda, 'tipoUnidade').filter(x => x.nome !== 'Não informado').slice(0, 15), 'Registros');
+      chartBar('chartFatAno', groupSum(agenda, 'anoInicio', 'faturamentoTotalNumero'), 'Faturamento', true);
+      chartBar('chartFreteAno', groupSum(agenda, 'anoInicio', 'valorFreteNumero'), 'Frete', true);
+      chartHorizontalBar('chartTipoUnidade', groupCount(agenda, 'tipoUnidade').filter(x => x.nome !== 'Não informado').slice(0, 15), 'Registros', false);
       chartDoughnut('chartStatusHistorico', groupCount(agenda, 'statusPadronizado').slice(0, 8));
     }
 
@@ -1051,16 +929,16 @@
       $('content').className = '';
       $('content').innerHTML = `
         <section class="section">
-          <div class="section-header">
+          <div class="section-head">
             <h2 class="section-title">Financeiro / Fretes</h2>
-            <span class="section-sub">Orçamento, contrato e análise mensal</span>
+            <div class="section-note">Dados de orçamento, contrato e análise mensal</div>
           </div>
 
           <div class="kpi-grid">
             ${kpi('Registros orçamento', fmtInt(k.registrosOrcamento), 'Orçamento 2025', 'primary')}
             ${kpi('Registros contrato', fmtInt(k.registrosContrato), 'CT 28724 - Canto e Rohde', 'primary')}
-            ${kpi('Previsto contrato', fmtMoney(k.previstoContrato), 'Valor previsto', 'warning')}
-            ${kpi('Realizado contrato', fmtMoney(k.realizadoContrato), 'Valor realizado', 'success')}
+            ${kpi('Previsto contrato', fmtMoney(k.previstoContrato), 'Valor previsto no contrato', 'warning')}
+            ${kpi('Realizado contrato', fmtMoney(k.realizadoContrato), 'Valor realizado no contrato', 'success')}
 
             ${kpi('Previsto orçamento', fmtMoney(k.previstoOrcamento), 'Orçamento 2025', 'warning')}
             ${kpi('Realizado orçamento', fmtMoney(k.realizadoOrcamento), 'Orçamento 2025', 'success')}
@@ -1071,24 +949,24 @@
 
         <section class="section grid-2">
           <div class="card">
-            <h3 class="card-title">Previsto x Realizado — Contrato</h3>
+            <h3 class="card-title">Previsto x realizado — contrato</h3>
             <div class="chart-box"><canvas id="chartContrato"></canvas></div>
           </div>
 
           <div class="card">
-            <h3 class="card-title">Previsto x Realizado — Orçamento</h3>
+            <h3 class="card-title">Previsto x realizado — orçamento</h3>
             <div class="chart-box"><canvas id="chartOrcamento"></canvas></div>
           </div>
         </section>
 
         <section class="section grid-2">
           <div class="card">
-            <h3 class="card-title">Contrato — valor por unidade</h3>
+            <h3 class="card-title">Contrato — realizado por unidade</h3>
             <div class="chart-box tall"><canvas id="chartContratoUnidade"></canvas></div>
           </div>
 
           <div class="card">
-            <h3 class="card-title">Análise dos valores — Real por mês</h3>
+            <h3 class="card-title">Análise dos valores — real por mês</h3>
             <div class="chart-box tall"><canvas id="chartAnaliseMes"></canvas></div>
           </div>
         </section>
@@ -1101,68 +979,93 @@
       chartBar('chartContrato', [
         { nome: 'Previsto', valor: k.previstoContrato || 0 },
         { nome: 'Realizado', valor: k.realizadoContrato || 0 }
-      ], 'Valor');
+      ], 'Valor', true);
 
       chartBar('chartOrcamento', [
         { nome: 'Previsto', valor: k.previstoOrcamento || 0 },
         { nome: 'Realizado', valor: k.realizadoOrcamento || 0 }
-      ], 'Valor');
+      ], 'Valor', true);
 
-      chartHorizontalBar('chartContratoUnidade', groupSum(contrato, 'unidadeMovel', 'valorRealizadoNumero').slice(0, 15), 'Realizado');
-      chartBar('chartAnaliseMes', groupSum(analise, 'mesNumero', 'realNumero'), 'Real');
+      chartHorizontalBar('chartContratoUnidade', groupSum(contrato, 'unidadeMovel', 'valorRealizadoNumero').slice(0, 15), 'Realizado', true);
+      chartBar('chartAnaliseMes', groupSum(analise, 'mesNumero', 'realNumero'), 'Real', true);
     }
 
     function renderFrota() {
       const cenarios = DASH.data?.cenarios || [];
       const preenchidos = cenarios.filter(x => x.preenchido);
 
+      const temPreenchimento = preenchidos.length > 0;
+
       $('content').className = '';
       $('content').innerHTML = `
         <section class="section">
-          <div class="section-header">
+          <div class="section-head">
             <h2 class="section-title">Frota / Cenários</h2>
-            <span class="section-sub">Planejamento 2023 a 2027</span>
+            <div class="section-note">Planejamento 2023 a 2027</div>
           </div>
 
           <div class="kpi-grid">
-            ${kpi('Células de cenário', fmtInt(cenarios.length), 'Unidade móvel x mês', 'primary')}
+            ${kpi('Células de cenário', fmtInt(cenarios.length), 'Unidade móvel x mês x ano', 'primary')}
             ${kpi('Células preenchidas', fmtInt(preenchidos.length), 'Com informação no cenário', 'success')}
-            ${kpi('Células vazias', fmtInt(cenarios.length - preenchidos.length), 'Sem preenchimento', '')}
+            ${kpi('Células vazias', fmtInt(cenarios.length - preenchidos.length), 'Sem preenchimento atual', '')}
             ${kpi('Anos carregados', '2023–2027', 'Cenários disponíveis', 'purple')}
           </div>
         </section>
 
-        <section class="section grid-2">
-          <div class="card">
-            <h3 class="card-title">Preenchimento por ano</h3>
-            <div class="chart-box"><canvas id="chartCenarioAno"></canvas></div>
-          </div>
+        ${
+          temPreenchimento
+            ? `
+              <section class="section grid-2">
+                <div class="card">
+                  <h3 class="card-title">Preenchimento por ano</h3>
+                  <div class="chart-box"><canvas id="chartCenarioAno"></canvas></div>
+                </div>
 
-          <div class="card">
-            <h3 class="card-title">Cenário por unidade móvel</h3>
-            <div class="chart-box tall"><canvas id="chartCenarioUnidade"></canvas></div>
-          </div>
-        </section>
+                <div class="card">
+                  <h3 class="card-title">Cenário por unidade móvel</h3>
+                  <div class="chart-box tall"><canvas id="chartCenarioUnidade"></canvas></div>
+                </div>
+              </section>
 
-        <section class="section">
-          ${renderCenariosTable(cenarios)}
-        </section>
+              <section class="section">
+                ${renderCenariosTable(preenchidos)}
+              </section>
+            `
+            : `
+              <section class="section">
+                <div class="empty-state">
+                  <strong>Os cenários 2023 a 2027 estão estruturados, mas não possuem preenchimento operacional nas células mensais.</strong><br>
+                  A matriz foi carregada com ${fmtInt(cenarios.length)} combinações de unidade móvel, mês e ano. Quando houver preenchimento nas abas de cenário e o JSON for atualizado, os gráficos e a tabela desta aba aparecerão automaticamente.
+                </div>
+              </section>
+
+              <section class="section">
+                ${renderCenarioEstruturaTable(cenarios)}
+              </section>
+            `
+        }
       `;
 
-      chartBar('chartCenarioAno', groupCount(preenchidos, 'ano'), 'Células preenchidas');
-      chartHorizontalBar('chartCenarioUnidade', groupCount(preenchidos, 'unidadeMovel').slice(0, 20), 'Células preenchidas');
+      if (temPreenchimento) {
+        chartBar('chartCenarioAno', groupCount(preenchidos, 'ano'), 'Células preenchidas', false);
+        chartHorizontalBar('chartCenarioUnidade', groupCount(preenchidos, 'unidadeMovel').slice(0, 20), 'Células preenchidas', false);
+      }
     }
 
     function renderProducao() {
       const producao = DASH.data?.producao || [];
       const k = DASH.kpis?.producao || {};
 
+      const temCarga = hasFilled(producao, 'cargaHoraria');
+      const temValor = hasFilled(producao, 'valor');
+      const temMatriculas = hasFilled(producao, 'matriculas');
+
       $('content').className = '';
       $('content').innerHTML = `
         <section class="section">
-          <div class="section-header">
+          <div class="section-head">
             <h2 class="section-title">Produção / Eficiência 2025</h2>
-            <span class="section-sub">Módulo independente da agenda/frota</span>
+            <div class="section-note">Módulo independente da agenda/frota</div>
           </div>
 
           <div class="kpi-grid">
@@ -1171,10 +1074,10 @@
             ${kpi('Regionais', fmtInt(k.regionais), 'Regionais distintas', '')}
             ${kpi('Cidades', fmtInt(k.cidades), 'Cidades de atendimento', '')}
 
-            ${kpi('Turmas preenchidas', fmtInt(k.turmasPreenchidas), 'Registros com turma', 'success')}
-            ${kpi('Carga horária', fmtInt(k.cargaHorariaTotal), 'Total informado', '')}
-            ${kpi('Valor total', fmtMoney(k.valorTotal), 'Total informado', 'warning')}
-            ${kpi('Matrículas', fmtInt(k.matriculasTotal), 'Total informado', 'purple')}
+            ${kpi('Turmas preenchidas', fmtInt(k.turmasPreenchidas), 'Registros com turma informada', 'success')}
+            ${kpi('Carga horária', temCarga ? fmtInt(k.cargaHorariaTotal) : 'Não informado', temCarga ? 'Total informado' : 'Campo existe na origem, mas está vazio', '')}
+            ${kpi('Valor total', temValor ? fmtMoney(k.valorTotal) : 'Não informado', temValor ? 'Total informado' : 'Campo existe na origem, mas está vazio', 'warning')}
+            ${kpi('Matrículas', temMatriculas ? fmtInt(k.matriculasTotal) : 'Não informado', temMatriculas ? 'Total informado' : 'Campo existe na origem, mas está vazio', 'purple')}
           </div>
         </section>
 
@@ -1191,12 +1094,12 @@
         </section>
 
         <section class="section">
-          ${renderProducaoTable(producao)}
+          ${renderProducaoTable(producao, { temCarga, temValor, temMatriculas })}
         </section>
       `;
 
-      chartBar('chartProdRegional', groupCount(producao, 'regional'), 'Registros');
-      chartHorizontalBar('chartProdUnidade', groupCount(producao, 'unidadeMovel'), 'Registros');
+      chartBar('chartProdRegional', groupCount(producao, 'regional'), 'Registros', false);
+      chartHorizontalBar('chartProdUnidade', groupCount(producao, 'unidadeMovel'), 'Registros', false);
     }
 
     function renderAnaliticos() {
@@ -1206,21 +1109,21 @@
       $('content').className = '';
       $('content').innerHTML = `
         <section class="section">
-          <div class="section-header">
+          <div class="section-head">
             <h2 class="section-title">Analíticos</h2>
-            <span class="section-sub">Tabelas detalhadas separadas por natureza de dado</span>
+            <div class="section-note">Agenda/Frota/Fretes e Produção em tabelas separadas</div>
           </div>
 
-          <div class="sub-tabs">
-            <button class="sub-tab ${analiticoTipo === 'agenda' ? 'active' : ''}" data-analitico="agenda">Agenda / Frota / Fretes</button>
-            <button class="sub-tab ${analiticoTipo === 'producao' ? 'active' : ''}" data-analitico="producao">Produção</button>
+          <div class="subtabs">
+            <button class="subtab ${analiticoTipo === 'agenda' ? 'active' : ''}" data-analitico="agenda">Agenda / Frota / Fretes</button>
+            <button class="subtab ${analiticoTipo === 'producao' ? 'active' : ''}" data-analitico="producao">Produção 2025</button>
           </div>
 
           <div id="analiticoArea"></div>
         </section>
       `;
 
-      document.querySelectorAll('.sub-tab').forEach(btn => {
+      document.querySelectorAll('.subtab').forEach(btn => {
         btn.addEventListener('click', () => {
           analiticoTipo = btn.dataset.analitico;
           agendaPage = 1;
@@ -1279,7 +1182,7 @@
       const limited = rows.slice(0, 25);
 
       return tableCard(
-        'Últimos registros do contrato',
+        'Registros do contrato',
         `${fmtInt(limited.length)} de ${fmtInt(rows.length)} registro(s)`,
         ['Unidade móvel', 'RN', 'OF', 'Coleta', 'Entrega', 'Data', 'Previsto', 'Realizado', 'NF'],
         limited.map(r => [
@@ -1297,13 +1200,13 @@
     }
 
     function renderCenariosTable(rows) {
-      const filled = rows.filter(x => x.preenchido).slice(0, 80);
+      const limited = rows.slice(0, 80);
 
       return tableCard(
         'Células preenchidas dos cenários',
-        `${fmtInt(filled.length)} registro(s) exibido(s)`,
+        `${fmtInt(limited.length)} registro(s) exibido(s)`,
         ['Ano', 'Unidade móvel', 'Mês', 'Valor'],
-        filled.map(r => [
+        limited.map(r => [
           esc(r.ano),
           esc(r.unidadeMovel),
           esc(r.mes),
@@ -1312,7 +1215,21 @@
       );
     }
 
-    function renderProducaoTable(rows) {
+    function renderCenarioEstruturaTable(rows) {
+      const resumo = groupCount(rows, 'ano');
+
+      return tableCard(
+        'Estrutura carregada dos cenários',
+        'Resumo estrutural por ano',
+        ['Ano', 'Células estruturadas'],
+        resumo.map(r => [
+          esc(r.nome),
+          fmtInt(r.valor)
+        ])
+      );
+    }
+
+    function renderProducaoTable(rows, flags) {
       return tableCard(
         'Resumo de produção 2025',
         `${fmtInt(rows.length)} registro(s)`,
@@ -1323,9 +1240,9 @@
           esc(r.regional),
           esc(r.cidadeAtendimento),
           esc(r.turma || '-'),
-          fmtInt(r.cargaHorariaNumero),
-          fmtMoney(r.valorNumero),
-          fmtInt(r.matriculasNumero)
+          flags.temCarga ? fmtInt(r.cargaHorariaNumero) : 'Não informado',
+          flags.temValor ? fmtMoney(r.valorNumero) : 'Não informado',
+          flags.temMatriculas ? fmtInt(r.matriculasNumero) : 'Não informado'
         ])
       );
     }
@@ -1362,8 +1279,12 @@
       const start = (producaoPage - 1) * PAGE_SIZE;
       const pageRows = rows.slice(start, start + PAGE_SIZE);
 
+      const temCarga = hasFilled(rows, 'cargaHoraria');
+      const temValor = hasFilled(rows, 'valor');
+      const temMatriculas = hasFilled(rows, 'matriculas');
+
       return tableCard(
-        'Analítico Produção',
+        'Analítico Produção 2025',
         `${fmtInt(rows.length)} registro(s)`,
         ['Unidade móvel', 'Unidade SENAI', 'Regional', 'Cidade', 'Turma', 'Carga horária', 'Valor', 'Matrículas'],
         pageRows.map(r => [
@@ -1372,9 +1293,9 @@
           esc(r.regional),
           esc(r.cidadeAtendimento),
           esc(r.turma || '-'),
-          fmtInt(r.cargaHorariaNumero),
-          fmtMoney(r.valorNumero),
-          fmtInt(r.matriculasNumero)
+          temCarga ? fmtInt(r.cargaHorariaNumero) : 'Não informado',
+          temValor ? fmtMoney(r.valorNumero) : 'Não informado',
+          temMatriculas ? fmtInt(r.matriculasNumero) : 'Não informado'
         ]),
         paginationHtml('producao', rows.length, producaoPage)
       );
@@ -1383,11 +1304,11 @@
     function tableCard(title, info, headers, rows, pagination = '') {
       const body = rows.length
         ? rows.map(row => `<tr>${row.map(cell => `<td>${cell}</td>`).join('')}</tr>`).join('')
-        : `<tr><td colspan="${headers.length}" class="empty">Nenhum registro encontrado.</td></tr>`;
+        : `<tr><td colspan="${headers.length}" style="text-align:center;color:var(--muted);padding:24px;">Nenhum registro encontrado.</td></tr>`;
 
       return `
         <div class="table-card">
-          <div class="table-toolbar">
+          <div class="table-top">
             <div class="table-title">${esc(title)}</div>
             <div class="table-info">${esc(info || '')}</div>
           </div>
@@ -1410,7 +1331,7 @@
       return `
         <div class="pagination">
           <div class="table-info">Página ${fmtInt(page)} de ${fmtInt(pages)}</div>
-          <div class="pagination-controls">
+          <div class="pg-controls">
             <button class="pg-btn" data-page-type="${type}" data-dir="-1" ${page <= 1 ? 'disabled' : ''}>Anterior</button>
             <button class="pg-btn" data-page-type="${type}" data-dir="1" ${page >= pages ? 'disabled' : ''}>Próxima</button>
           </div>
@@ -1424,13 +1345,8 @@
           const dir = Number(btn.dataset.dir);
           const max = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
-          if (type === 'agenda') {
-            agendaPage = Math.min(max, Math.max(1, agendaPage + dir));
-          }
-
-          if (type === 'producao') {
-            producaoPage = Math.min(max, Math.max(1, producaoPage + dir));
-          }
+          if (type === 'agenda') agendaPage = Math.min(max, Math.max(1, agendaPage + dir));
+          if (type === 'producao') producaoPage = Math.min(max, Math.max(1, producaoPage + dir));
 
           renderAnaliticos();
         });
@@ -1439,7 +1355,7 @@
 
     function kpi(label, value, sub, tone = '') {
       return `
-        <article class="kpi-card ${tone}">
+        <article class="kpi ${tone}">
           <div class="kpi-label">${esc(label)}</div>
           <div class="kpi-value">${value ?? '-'}</div>
           <div class="kpi-sub">${esc(sub || '')}</div>
@@ -1449,7 +1365,7 @@
 
     function metric(label, value) {
       return `
-        <div class="metric-row">
+        <div class="metric">
           <span>${esc(label)}</span>
           <strong>${value}</strong>
         </div>
@@ -1458,25 +1374,22 @@
 
     function statusBadge(status) {
       const s = String(status || 'Sem status');
-      const cls = norm(s).replace(/\s+/g, '-');
-      let mapped = '';
+      let cls = '';
 
-      if (s === 'Realizado') mapped = 'realizado';
-      else if (s === 'Cancelado') mapped = 'cancelado';
-      else if (s === 'Atual') mapped = 'atual';
-      else if (s === 'Confirmado') mapped = 'confirmado';
-      else if (s === 'Livre') mapped = 'livre';
-      else mapped = cls;
+      if (s === 'Realizado') cls = 'realizado';
+      else if (s === 'Cancelado') cls = 'cancelado';
+      else if (s === 'Atual') cls = 'atual';
+      else if (s === 'Confirmado') cls = 'confirmado';
 
-      return `<span class="badge ${mapped}">${esc(s)}</span>`;
+      return `<span class="badge ${cls}">${esc(s)}</span>`;
     }
 
     function calcKpisAgenda(agenda) {
       const total = agenda.length;
-      const realizados = agenda.filter(x => x.statusPadronizado === 'Realizado').length;
-      const cancelados = agenda.filter(x => x.statusPadronizado === 'Cancelado').length;
-      const atuais = agenda.filter(x => x.statusPadronizado === 'Atual').length;
-      const confirmados = agenda.filter(x => x.statusPadronizado === 'Confirmado').length;
+      const realizados = countStatus(agenda, 'Realizado');
+      const cancelados = countStatus(agenda, 'Cancelado');
+      const atuais = countStatus(agenda, 'Atual');
+      const confirmados = countStatus(agenda, 'Confirmado');
       const faturamentoTotal = sum(agenda, 'faturamentoTotalNumero');
       const freteTotal = sum(agenda, 'valorFreteNumero');
       const comFrete = agenda.filter(x => Number(x.valorFreteNumero || 0) > 0).length;
@@ -1499,6 +1412,10 @@
         percentualEscolaMovel: total ? escolaSim / total : 0,
         cidadeTop
       };
+    }
+
+    function countStatus(arr, status) {
+      return arr.filter(x => x.statusPadronizado === status).length;
     }
 
     function resumoUnidades(agenda) {
@@ -1526,7 +1443,7 @@
         map[key].freteTotal += Number(item.valorFreteNumero || 0);
       });
 
-      return Object.values(map).sort((a,b) => b.total - a.total);
+      return Object.values(map).sort((a, b) => b.total - a.total);
     }
 
     function resumoCidades(agenda) {
@@ -1553,7 +1470,7 @@
         map[key].freteTotal += Number(item.valorFreteNumero || 0);
       });
 
-      return Object.values(map).sort((a,b) => b.total - a.total);
+      return Object.values(map).sort((a, b) => b.total - a.total);
     }
 
     function groupCount(arr, field) {
@@ -1566,13 +1483,13 @@
 
       return Object.keys(map)
         .map(k => ({ nome: k, valor: map[k] }))
-        .sort((a,b) => b.valor - a.valor);
+        .sort((a, b) => b.valor - a.valor);
     }
 
-    function groupSumCount(arr, field) {
+    function groupCountByYear(arr, field) {
       return groupCount(arr, field)
         .filter(x => x.nome !== 'Não informado')
-        .sort((a,b) => Number(a.nome) - Number(b.nome));
+        .sort((a, b) => Number(a.nome) - Number(b.nome));
     }
 
     function groupSum(arr, groupField, valueField) {
@@ -1586,7 +1503,7 @@
       return Object.keys(map)
         .map(k => ({ nome: k, valor: map[k] }))
         .filter(x => x.nome !== 'Não informado')
-        .sort((a,b) => {
+        .sort((a, b) => {
           const na = Number(a.nome);
           const nb = Number(b.nome);
           if (!isNaN(na) && !isNaN(nb)) return na - nb;
@@ -1594,7 +1511,7 @@
         });
     }
 
-    function chartBar(id, data, label) {
+    function chartBar(id, data, label, money) {
       const ctx = $(id);
       if (!ctx) return;
 
@@ -1605,18 +1522,18 @@
           datasets: [{
             label,
             data: data.map(x => x.valor),
-            backgroundColor: '#164194',
-            borderRadius: 8,
-            maxBarThickness: 48
+            backgroundColor: '#1b4f9c',
+            borderRadius: 5,
+            maxBarThickness: 42
           }]
         },
-        options: baseChartOptions()
+        options: chartOptions(money)
       });
 
       charts.push(chart);
     }
 
-    function chartHorizontalBar(id, data, label) {
+    function chartHorizontalBar(id, data, label, money) {
       const ctx = $(id);
       if (!ctx) return;
 
@@ -1627,13 +1544,13 @@
           datasets: [{
             label,
             data: data.map(x => x.valor),
-            backgroundColor: '#164194',
-            borderRadius: 8,
+            backgroundColor: '#1b4f9c',
+            borderRadius: 5,
             maxBarThickness: 22
           }]
         },
         options: {
-          ...baseChartOptions(),
+          ...chartOptions(money),
           indexAxis: 'y'
         }
       });
@@ -1645,7 +1562,7 @@
       const ctx = $(id);
       if (!ctx) return;
 
-      const colors = ['#039855', '#d92d20', '#164194', '#6941c6', '#dc6803', '#667085', '#12b76a', '#84adff'];
+      const colors = ['#16875a', '#b42318', '#1b4f9c', '#5b45b5', '#b65c00', '#667085', '#7aa7e8', '#aab4c2'];
 
       const chart = new Chart(ctx, {
         type: 'doughnut',
@@ -1654,25 +1571,26 @@
           datasets: [{
             data: data.map(x => x.valor),
             backgroundColor: colors,
-            borderColor: '#ffffff',
+            borderColor: '#fff',
             borderWidth: 3
           }]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          cutout: '62%',
           plugins: {
             legend: {
               position: 'bottom',
               labels: {
-                boxWidth: 12,
-                boxHeight: 12,
-                font: { size: 11, weight: '700' }
+                boxWidth: 10,
+                boxHeight: 10,
+                font: { size: 11, weight: 'bold' }
               }
             },
             tooltip: {
               callbacks: {
-                label: context => `${context.label}: ${fmtInt(context.raw)}`
+                label: ctx => `${ctx.label}: ${fmtInt(ctx.raw)}`
               }
             }
           }
@@ -1682,33 +1600,31 @@
       charts.push(chart);
     }
 
-    function baseChartOptions() {
+    function chartOptions(money) {
       return {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: {
-            display: false
-          },
+          legend: { display: false },
           tooltip: {
             callbacks: {
-              label: context => `${context.dataset.label || 'Valor'}: ${formatChartValue(context.raw)}`
+              label: ctx => `${ctx.dataset.label || 'Valor'}: ${money ? fmtMoney(ctx.raw) : fmtInt(ctx.raw)}`
             }
           }
         },
         scales: {
           x: {
-            grid: { color: '#edf0f5' },
+            grid: { color: '#eef1f5' },
             ticks: {
               color: '#667085',
-              font: { size: 11, weight: '700' }
+              font: { size: 10 }
             }
           },
           y: {
-            grid: { color: '#edf0f5' },
+            grid: { color: '#eef1f5' },
             ticks: {
               color: '#667085',
-              font: { size: 11, weight: '700' }
+              font: { size: 10 }
             }
           }
         }
@@ -1716,7 +1632,7 @@
     }
 
     function destroyCharts() {
-      charts.forEach(c => c.destroy());
+      charts.forEach(chart => chart.destroy());
       charts = [];
     }
 
@@ -1770,6 +1686,10 @@
       return '"' + String(value ?? '').replace(/"/g, '""') + '"';
     }
 
+    function hasFilled(arr, field) {
+      return arr.some(item => String(item[field] ?? '').trim() !== '');
+    }
+
     function sum(arr, field) {
       return arr.reduce((acc, item) => acc + Number(item[field] || 0), 0);
     }
@@ -1820,12 +1740,6 @@
     function pctText(part, total) {
       if (!total) return '0%';
       return pct(Number(part || 0) / Number(total || 0));
-    }
-
-    function formatChartValue(value) {
-      const n = Number(value || 0);
-      if (Math.abs(n) >= 10000) return fmtMoney(n);
-      return fmtInt(n);
     }
 
     function esc(value) {
